@@ -15,6 +15,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(strutext CXX)
 
+message(STATUS "***** Strutext project *****")
+
 set(STRUTEXT_ROOT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(STRUTEXT_ROOT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 

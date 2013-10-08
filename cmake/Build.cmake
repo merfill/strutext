@@ -22,7 +22,8 @@ endif ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
 # Allowing only Debug and Release build types.
 # Set Debug build type by default.
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type is not set. Use Debug build type by default" FORCE)
+  set(CMAKE_BUILD_TYPE Debug)
+  message(STATUS "Build type is not set. Use Debug build type by default")
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${STRUTEXT_ROOT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
@@ -36,6 +37,7 @@ endif (${CMAKE_COMPILER_IS_GNUCXX})
 
 # Definitions for build types.
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+  message(STATUS "Debug configuration")
   # Flags fog GCC.
   if (${CMAKE_COMPILER_IS_GNUCXX})
     # Profiling: run cmake -DGPROF=1.
@@ -48,6 +50,7 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-inline-functions -fno-inline -O -ggdb3")
   endif (${CMAKE_COMPILER_IS_GNUCXX})
 elseif (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+  message(STATUS "Release configuration")
   # Flags fog GCC.
   if (${CMAKE_COMPILER_IS_GNUCXX})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
