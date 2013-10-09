@@ -83,3 +83,4 @@ add_definitions(-DSTRUTEXT_UNIT_TEST_DIR="${STRUTEXT_UNIT_TEST_DIR}")
 
 # Putting it in the directories from the list below:
 add_subdirectory(symbols)
+add_subdirectory(encode)

@@ -18,9 +18,6 @@
  * \date   08.10.2013
  */
 
-#define BOOST_TEST_MODULE symbols
-#define BOOST_AUTO_TEST_MAIN
-
 #include <boost/test/unit_test.hpp>
 
 #include "symbols.h"

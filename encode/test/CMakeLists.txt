@@ -13,21 +13,21 @@
 #   limitations under the License.
 
 include_directories(${Log4cplus_INCLUDE_DIR})
-include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/symbols)
+include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/encode)
 
-set(UNIT_TEST_NAME symbols-unit-test)
-set(UNIT_TEST_SOURCES
+set(UNIT_TEST_MODULE encode-unit-test)
+set(UNIT_TESTS_SOURCES
   ${STRUTEXT_ROOT_SOURCE_DIR}/ut-data/ut_main.cpp
-  test.cpp
+  utf8_iterator_test.cpp
+  char_iterator_test.cpp
 )
 
-add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES})
-
-target_link_libraries(${UNIT_TEST_NAME}
-  symbols
+add_executable(${UNIT_TEST_MODULE} ${UNIT_TESTS_SOURCES})
+target_link_libraries(${UNIT_TEST_MODULE}
+  encode
   ${Log4cplus_LIBRARY}
   ${Boost_REGEX_LIBRARY}
   ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 
-add_boost_tests("${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${UNIT_TEST_NAME}" "--catch_system_errors=no" ${UNIT_TEST_SOURCES})
+add_boost_tests("${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${UNIT_TEST_MODULE}" "--catch_system_errors=no" ${UNIT_TESTS_SOURCES})

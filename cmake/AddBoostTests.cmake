@@ -24,6 +24,10 @@ function (add_boost_tests EXECUTABLE EXTRA_ARGS)
     message(FATAL_ERROR "No source files given to `add_boost_tests'")
   endif()
 
+  # Set name of the test module.
+  add_definitions(-DUNIT_TEST_MODULE_NAME="${UNIT_TEST_MODULE}")
+
+
   # Search BOOST_AUTO_TEST_CASE or BOOST_FIXTURE_TEST_CASE in the source files and add it as CTest test.
   foreach(source ${ARGN})
     file(STRINGS "${source}" found_tests REGEX "BOOST_(AUTO|FIXTURE)_TEST_CASE")
