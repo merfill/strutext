@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   utf8_generator.h
  * \brief  Utilities to generate UTF-8 sequence by UNICODE32 code.
  * \author Vladimir Lapshin.
- * \date   09.10.2013
  */
 
 #pragma once
@@ -58,10 +56,17 @@ inline ByteIterator GetUtf8Sequence(strutext::symbols::SymbolCode code, ByteIter
   uint8_t sequence[4] = {0};
   uint8_t* target = sequence + bytes_to_write;
   switch (bytes_to_write) {
-    case 4: *--target = ((code | kByteMark) & kByteMask); code >>= 6;
-    case 3: *--target = ((code | kByteMark) & kByteMask); code >>= 6;
-    case 2: *--target = ((code | kByteMark) & kByteMask); code >>= 6;
-    case 1: *--target = (code | kFirstByteMark[bytes_to_write]);
+    case 4:
+      *--target = ((code | kByteMark) & kByteMask);
+      code >>= 6;
+    case 3:
+      *--target = ((code | kByteMark) & kByteMask);
+      code >>= 6;
+    case 2:
+      *--target = ((code | kByteMark) & kByteMask);
+      code >>= 6;
+    case 1:
+      *--target = (code | kFirstByteMark[bytes_to_write]);
   }
 
   // And write it to output iterator.

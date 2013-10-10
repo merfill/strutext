@@ -1043,7 +1043,6 @@ def CheckForFileHeader(filename, lines, error):
 
   do_author = False
   do_brief = False
-  do_date = False
   for line in lines[2:]:
     if re.match(r'.*\*/.*', line):
       break
@@ -1051,10 +1050,8 @@ def CheckForFileHeader(filename, lines, error):
       do_author = True
     elif re.match(r'.*\\brief\s+\S.{10,}', line):
       do_brief = True
-    elif re.match(r'.*\\date\s+\d{2}\.\d{2}\.\d{4}', line):
-      do_date = True
 
-  if not all((do_copyright, do_author, do_brief, do_date)):
+  if not all((do_copyright, do_author, do_brief)):
     header_ok = False
 
   herror_level = 'unknown'
@@ -1063,22 +1060,31 @@ def CheckForFileHeader(filename, lines, error):
       herror_level = 'copyright'
     if not do_brief:
       herror_level = 'brief'
-    if not do_date:
-      herror_level = 'date'
     if not do_author:
       herror_level = 'author'
 
     error(filename, 1, 'legal/copyright', 5,
       'No valid header found. Error in %s. '
-      'It should include nonempty brief, author and date definitions, '
+      'It should include nonempty brief description and author definitions, '
       'Date must be in the format "dd.mm.yyyy". '
       u"""Use could use the following template:
 
-/** Copyright &copy; 2009-2011, Signaltechs.
- * \\brief   Библиотека для обработки сообщений из астрала.
+/** Copyright &copy; 2013, Vladimir Lapshin.
  *
- * \\author  Пупкин В.Н.
- * \\date    12.12.2012
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ * \\brief   File description.
+ * \\author  Vladimir Lapshin.
  */
 
 """ % herror_level)

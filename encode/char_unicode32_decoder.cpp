@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   char_unicode32_decoder.cpp
  * \brief  UNNICODE32 code tables for single byte encodes.
  * \author Vladimir Lapshin.
- * \date   09.10.2013
  */
 
 #include "char_unicode32_decoder.h"

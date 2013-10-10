@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   char_iterator.h
  * \brief  Iterator for character encodings.
  * \author Vladimir Lapshin.
- * \date   09.10.2013
  */
 
 #pragma once

@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   char_iterator_test.cpp
  * \brief  Single byte character iterator unit test.
  * \author Vladimir Lapshin.
- * \date   09.10.2013
  */
 
 #include <boost/test/unit_test.hpp>

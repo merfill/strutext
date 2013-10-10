@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   symbols.h
  * \brief  Symbol classes and operations.
  * \author Vladimir Lapshin.
- * \date   08.10.2013
  */
 
 #pragma once
@@ -152,4 +150,4 @@ const SymbolCode MAX_UTF32        = 0x7fffffffu;
 const SymbolCode MAX_LEGAL_UTF32  = 0x0010ffffu;
 const SymbolCode MAX_UTF16        = 0x0010ffffu;
 
-}}  // namespace strutext, symbols.
+}} // namespace strutext, symbols.

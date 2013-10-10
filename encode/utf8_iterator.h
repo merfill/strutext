@@ -12,10 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \file   utf8_iterator.h
  * \brief  UTF-8 iterator on byte sequences.
  * \author Vladimir Lapshin.
- * \date   09.10.2013
  */
 
 #pragma once
