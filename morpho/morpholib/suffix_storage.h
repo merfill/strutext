@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
+#include <cstddef>
 #include <string>
 #include <vector>
 #include <map>
@@ -29,6 +29,7 @@
 #include <memory>
 
 #include <boost/noncopyable.hpp>
+#include <boost/serialization/access.hpp>
 
 namespace strutext { namespace morpho {
 
@@ -124,7 +125,6 @@ public:
     } else {
       throw std::invalid_argument("incorrect line id passed");
     }
-
   }
 
   /// Serialization implementation.

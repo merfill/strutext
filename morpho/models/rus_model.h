@@ -26,12 +26,12 @@
 namespace strutext { namespace morpho {
 
 /// Russian morpho model base abstract class definition.
-struct RussianPos : public Pos {
+struct RussianPos : public PartOfSpeech {
   /// Type of smart pointer to the class object.
   typedef std::shared_ptr<RussianPos> Ptr;
 
   /// Possible parts of speech.
-  enum PartOfSpeech {
+  enum PosTag {
     UNKNOWN_PS                = 0 ///< Unknown part of speech.
 
     , NOUN_PS                 = 1   ///< существительное
@@ -147,7 +147,7 @@ struct RussianPos : public Pos {
   virtual ~RussianPos() {}
 
   /// Get part of speech tag.
-  virtual PartOfSpeech GetPosTag() const = 0;
+  virtual PosTag GetPosTag() const = 0;
 
   /// Serialization implementaion.
   virtual void Serialize(uint32_t& out) const = 0;
@@ -156,16 +156,18 @@ struct RussianPos : public Pos {
   virtual void Deserialize(const uint32_t& in) = 0;
 
   /// Write POS signature.
-  static void WritePosSign(PartOfSpeech pos, uint32_t& out) {
+  static void WritePosSign(PosTag pos, uint32_t& out) {
     // Write to lower 5 bits.
     out |= static_cast<uint32_t>(pos);
   }
 
   /// Read POS signature.
-  static PartOfSpeech ReadPosSign(const uint32_t& in) {
-    return PartOfSpeech(in & 0x1f);
+  static PosTag ReadPosSign(const uint32_t& in) {
+    return PosTag(in & 0x1f);
   }
 };
+
+namespace russian {
 
 /// Noun class definition.
 struct Noun : public RussianPos {
@@ -177,7 +179,7 @@ struct Noun : public RussianPos {
     , entity_(UNKNOWN_ENTITY) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return NOUN_PS; }
+  PosTag GetPosTag() const { return NOUN_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -235,7 +237,7 @@ struct Adjective : public RussianPos {
     , brevity_(false) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return ADJECTIVE_PS; }
+  PosTag GetPosTag() const { return ADJECTIVE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -295,7 +297,7 @@ struct PronounNoun : public RussianPos {
     , person_(UNKNOWN_PERSON) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PRONOUN_NOUN_PS; }
+  PosTag GetPosTag() const { return PRONOUN_NOUN_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -354,7 +356,7 @@ struct Verb : public RussianPos {
     , impersonal_(false) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return VERB_PS; }
+  PosTag GetPosTag() const { return VERB_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -419,7 +421,7 @@ struct Participle : public RussianPos {
     , animation_(UNKNOWN_ANIMATION) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PARTICIPLE_PS; }
+  PosTag GetPosTag() const { return PARTICIPLE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -480,7 +482,7 @@ struct AdverbParticiple : public RussianPos {
     , voice_(UNKNOWN_VOICE) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return ADVERB_PARTICIPLE_PS; }
+  PosTag GetPosTag() const { return ADVERB_PARTICIPLE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -529,7 +531,7 @@ struct PronounPredicative : public RussianPos {
     , case_(UNKNOWN_CASE) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PRONOUN_PREDICATIVE_PS; }
+  PosTag GetPosTag() const { return PRONOUN_PREDICATIVE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -580,7 +582,7 @@ struct PronounAdjective : public RussianPos {
     , animation_(UNKNOWN_ANIMATION) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PRONOUN_ADJECTIVE_PS; }
+  PosTag GetPosTag() const { return PRONOUN_ADJECTIVE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -635,7 +637,7 @@ struct NumeralQuantitative : public RussianPos {
     , case_(UNKNOWN_CASE) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return NUMERAL_QUANTITATIVE_PS; }
+  PosTag GetPosTag() const { return NUMERAL_QUANTITATIVE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -687,7 +689,7 @@ struct NumeralOrdinal : public RussianPos {
     , animation_(UNKNOWN_ANIMATION) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return NUMERAL_ORDINAL_PS; }
+  PosTag GetPosTag() const { return NUMERAL_ORDINAL_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -744,7 +746,7 @@ struct Adverb : public RussianPos {
   }
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return ADVERB_PS; }
+  PosTag GetPosTag() const { return ADVERB_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -796,7 +798,7 @@ struct Predicate : public RussianPos {
     , unchanged_(false) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PREDICATE_PS; }
+  PosTag GetPosTag() const { return PREDICATE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -838,12 +840,12 @@ struct Predicate : public RussianPos {
 };
 
 /// Temlate class for poor pos.
-template <RussianPos::PartOfSpeech pos>
+template <RussianPos::PosTag pos>
 struct PoorPos : public RussianPos {
   PoorPos() : lang_(NORMAL_LANG) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return pos; }
+  PosTag GetPosTag() const { return pos; }
 
   /**
    * \brief Serialization implementaion.
@@ -913,7 +915,7 @@ struct PosSerializer {
    * \param ob  the buffer to read from.
    */
   static RussianPos::Ptr Deserialize(const uint32_t& ob) {
-    RussianPos::PartOfSpeech pos_tag = RussianPos::ReadPosSign(ob);
+    RussianPos::PosTag pos_tag = RussianPos::ReadPosSign(ob);
     RussianPos::Ptr pos;
     switch (pos_tag) {
       case RussianPos::NOUN_PS:
@@ -977,4 +979,4 @@ struct PosSerializer {
   }
 };
 
-}} // namespace strutext, morpho.
+}}} // namespace strutext, morpho, russian.

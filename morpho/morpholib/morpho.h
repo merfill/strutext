@@ -27,7 +27,7 @@
 #include <boost/noncopyable.hpp>
 
 #include "utf8_iterator.h"
-#include "utf8_utils.h"
+#include "utf8_generator.h"
 #include "flex_transitions.h"
 #include "serializer.h"
 #include "trie.h"
@@ -204,7 +204,7 @@ public:
         suffix.push_back('\0');
       }
       if (const SuffixStorage::AttrList* att_list = suff_store_.SearchAttrs(attr.line_id_, suffix)) {
-        for (auto i = 0; i < att_list->size(); ++i) {
+        for (size_t i = 0; i < att_list->size(); ++i) {
           lem_list.push_back(Lemma(attr.lem_id_, (*att_list)[i]));
         }
       }
@@ -310,7 +310,6 @@ private:
   BaseStorage   base_store_; ///< Base texts storage.
   SuffixStorage suff_store_; ///< Suffix storage.
   AlphabetImpl  alphabet_;   ///< Alphabet implementation.
-
 };
 
 }} // namespace strutext, morpho.

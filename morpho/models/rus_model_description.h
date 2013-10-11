@@ -1,8 +1,19 @@
-/** Copyright &copy; 2011-2012, Factor.
- * \file   rus_model_description.h
+/** Copyright &copy; 2013, Vladimir Lapshin.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  * \brief  Russian morphology model text representation.
  * \author Vladimir Lapshin.
- * \date   20.05.2012
  */
 
 #pragma once
@@ -12,10 +23,10 @@
 
 #include "rus_model.h"
 
-namespace factor { namespace morpho { namespace russian {
+namespace strutext { namespace morpho {
 
-/// Russian decription.
-struct RussianDecription {
+/// Russian POS decription.
+struct RussianPosDecription {
   /// Get part of speech description.
   static std::string GetDecription(RussianPos::Ptr pos) {
     std::stringstream st;
@@ -24,12 +35,11 @@ struct RussianDecription {
         st << "неизвестная часть речи";
         break;
       case RussianPos::NOUN_PS: {
-        const Noun* pp = static_cast<const Noun*>(pos.get());
+        const russian::Noun* pp = static_cast<const russian::Noun*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
-           << ", " << GetCaseDescription(pp->case_)
-           ;
+           << ", " << GetCaseDescription(pp->case_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
@@ -39,13 +49,12 @@ struct RussianDecription {
         break;
       }
       case RussianPos::ADJECTIVE_PS: {
-        const Adjective* pp = static_cast<const Adjective*>(pos.get());
+        const russian::Adjective* pp = static_cast<const russian::Adjective*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
            << ", " << GetCaseDescription(pp->case_)
-           << ", " << GetAnimationDescription(pp->animation_)
-           ;
+           << ", " << GetAnimationDescription(pp->animation_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
@@ -55,125 +64,115 @@ struct RussianDecription {
         break;
       }
       case RussianPos::PRONOUN_NOUN_PS: {
-        const PronounNoun* pp = static_cast<const PronounNoun*>(pos.get());
+        const russian::PronounNoun* pp = static_cast<const russian::PronounNoun*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
            << ", " << GetCaseDescription(pp->case_)
-           << ", " << GetPersonDescription(pp->person_)
-           ;
+           << ", " << GetPersonDescription(pp->person_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::VERB_PS: {
-        const Verb* pp = static_cast<const Verb*>(pos.get());
+        const russian::Verb* pp = static_cast<const russian::Verb*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetTimeDescription(pp->time_)
            << ", " << GetVoiceDescription(pp->voice_)
            << ", " << GetPersonDescription(pp->person_)
            << ", " << GetGenderDescription(pp->gender_)
-           << ", " << (pp->impersonal_ ? "безличная форма" : "личная форма")
-           ;
+           << ", " << (pp->impersonal_ ? "безличная форма" : "личная форма");
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::PARTICIPLE_PS: {
-        const Participle* pp = static_cast<const Participle*>(pos.get());
+        const russian::Participle* pp = static_cast<const russian::Participle*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetTimeDescription(pp->time_)
            << ", " << GetVoiceDescription(pp->voice_)
            << ", " << GetCaseDescription(pp->case_)
            << ", " << GetGenderDescription(pp->gender_)
-           << ", " << GetAnimationDescription(pp->animation_)
-           ;
+           << ", " << GetAnimationDescription(pp->animation_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::ADVERB_PARTICIPLE_PS: {
-        const AdverbParticiple* pp = static_cast<const AdverbParticiple*>(pos.get());
+        const russian::AdverbParticiple* pp = static_cast<const russian::AdverbParticiple*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetTimeDescription(pp->time_)
-           << ", " << GetVoiceDescription(pp->voice_)
-           ;
+           << ", " << GetVoiceDescription(pp->voice_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::PRONOUN_PREDICATIVE_PS: {
-        const PronounPredicative* pp = static_cast<const PronounPredicative*>(pos.get());
+        const russian::PronounPredicative* pp = static_cast<const russian::PronounPredicative*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
-           << ", " << GetCaseDescription(pp->case_)
-           ;
+           << ", " << GetCaseDescription(pp->case_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::PRONOUN_ADJECTIVE_PS: {
-        const PronounAdjective* pp = static_cast<const PronounAdjective*>(pos.get());
+        const russian::PronounAdjective* pp = static_cast<const russian::PronounAdjective*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
            << ", " << GetCaseDescription(pp->case_)
-           << ", " << GetAnimationDescription(pp->animation_)
-           ;
+           << ", " << GetAnimationDescription(pp->animation_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::NUMERAL_QUANTITATIVE_PS: {
-        const NumeralQuantitative* pp = static_cast<const NumeralQuantitative*>(pos.get());
+        const russian::NumeralQuantitative* pp = static_cast<const russian::NumeralQuantitative*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetGenderDescription(pp->gender_)
-           << ", " << GetCaseDescription(pp->case_)
-           ;
+           << ", " << GetCaseDescription(pp->case_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::NUMERAL_ORDINAL_PS: {
-        const NumeralOrdinal* pp = static_cast<const NumeralOrdinal*>(pos.get());
+        const russian::NumeralOrdinal* pp = static_cast<const russian::NumeralOrdinal*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
            << ", " << GetCaseDescription(pp->case_)
-           << ", " << GetAnimationDescription(pp->animation_)
-           ;
+           << ", " << GetAnimationDescription(pp->animation_);
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::ADVERB_PS: {
-        const Adverb* pp = static_cast<const Adverb*>(pos.get());
+        const russian::Adverb* pp = static_cast<const russian::Adverb*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << (pp->relativity_ ? "относительное" : "неотносительное")
            << ", " << (pp->quastionarity_ ? "вопросительное" : "невопросительное")
-           << ", " << (pp->brevity_ ? "краткое" : "некраткое")
-           ;
+           << ", " << (pp->brevity_ ? "краткое" : "некраткое");
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
         break;
       }
       case RussianPos::PREDICATE_PS: {
-        const Predicate* pp = static_cast<const Predicate*>(pos.get());
+        const russian::Predicate* pp = static_cast<const russian::Predicate*>(pos.get());
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetTimeDescription(pp->time_)
-           << ", " << (pp->unchanged_ ? "неизменяемое" : "изменяемое")
-           ;
+           << ", " << (pp->unchanged_ ? "неизменяемое" : "изменяемое");
         if (pp->lang_ != RussianPos::NORMAL_LANG) {
           st << ", " << GetLangDescription(pp->lang_);
         }
@@ -184,8 +183,7 @@ struct RussianDecription {
       case RussianPos::INTERJECTION_PS:
       case RussianPos::PARTICLE_PS:
       case RussianPos::INTRODUCTORY_WORD_PS: {
-        st << GetPosDescription(pos->GetPosTag())
-           ;
+        st << GetPosDescription(pos->GetPosTag());
         break;
       }
 
@@ -196,7 +194,7 @@ struct RussianDecription {
   }
 
   /// Get part of speech description.
-  static std::string GetPosDescription(RussianPos::PartOfSpeech pos) {
+  static std::string GetPosDescription(RussianPos::PosTag pos) {
     switch (pos) {
       case RussianPos::UNKNOWN_PS:              return "неизвестное значение";
       case RussianPos::NOUN_PS:                 return "существительное";
@@ -354,4 +352,4 @@ struct RussianDecription {
   }
 };
 
-}}} // namespace factor, morpho, russian.
+}} // namespace strutext, morpho.

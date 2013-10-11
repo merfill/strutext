@@ -25,10 +25,10 @@
 namespace strutext { namespace morpho {
 
 /// Part of speech base class.
-class Pos : private boost::noncopyable {
+class PartOfSpeech : private boost::noncopyable {
 public:
   /// Type of smart pointer to the class object.
-  typedef std::shared_ptr<Pos> Ptr;
+  typedef std::shared_ptr<PartOfSpeech> Ptr;
 
   /// Language tag definitions.
   enum LanguageTag {
@@ -42,7 +42,7 @@ public:
   virtual LanguageTag GetLangTag() const = 0;
 
   /// Virtual destruction for abstract class.
-  virtual ~Pos() {}
+  virtual ~PartOfSpeech() {}
 };
 
 }} // namespace strutext, morpho.

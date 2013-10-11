@@ -1,8 +1,19 @@
-/** Copyright &copy; 2011-2013, Factor.
- * \file   eng_model_description.h
- * \brief  Englich morphology model text representation.
+/** Copyright &copy; 2013, Vladimir Lapshin.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ * \brief  English morphology model text representation.
  * \author Vladimir Lapshin.
- * \date   03.04.2013
  */
 
 #pragma once
@@ -12,10 +23,10 @@
 
 #include "eng_model.h"
 
-namespace factor { namespace morpho { namespace english {
+namespace strutext { namespace morpho {
 
 /// English description.
-struct EnglishDescription {
+struct EnglishPosDescription {
   /// Get part of speech description.
   static std::string GetDescription(EnglishPos* pos) {
     std::stringstream st;
@@ -24,62 +35,56 @@ struct EnglishDescription {
         st << "unknown part of speech";
         break;
       case EnglishPos::NOUN_PS: {
-        const Noun* pp = static_cast<const Noun*>(pos);
+        const english::Noun* pp = static_cast<const english::Noun*>(pos);
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetGenderDescription(pp->gender_)
            << ", " << GetCaseDescription(pp->case_)
            << ", " << GetAnimationDescription(pp->animation_)
-           << ", " << GetPronounTypeDescription(pp->type_)
-           ;
+           << ", " << GetPronounTypeDescription(pp->type_);
         if (pp->narrative_) {
           st << ", narrative";
         }
         break;
       }
       case EnglishPos::ADJECTIVE_PS: {
-        const Adjective* pp = static_cast<const Adjective*>(pos);
+        const english::Adjective* pp = static_cast<const english::Adjective*>(pos);
         st << GetPosDescription(pp->GetPosTag())
-           << ", " << GetDegreeDescription(pp->degree_)
-           ;
+           << ", " << GetDegreeDescription(pp->degree_);
         if (pp->prop_) {
           st << ", propper name";
         }
         break;
       }
       case EnglishPos::VERB_PS: {
-        const Verb* pp = static_cast<const Verb*>(pos);
+        const english::Verb* pp = static_cast<const english::Verb*>(pos);
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetTimeDescription(pp->time_)
            << ", " << GetGenderDescription(pp->gender_)
-           << ", " << GetPersonDescription(pp->person_)
-           ;
+           << ", " << GetPersonDescription(pp->person_);
         break;
       }
       case EnglishPos::ADVERB_PS: {
-        const Adverb* pp = static_cast<const Adverb*>(pos);
+        const english::Adverb* pp = static_cast<const english::Adverb*>(pos);
         st << GetPosDescription(pp->GetPosTag())
-           << ", " << GetDegreeDescription(pp->degree_)
-           ;
+           << ", " << GetDegreeDescription(pp->degree_);
         break;
       }
       case EnglishPos::PRONOUN_PS: {
-        const Pronoun* pp = static_cast<const Pronoun*>(pos);
+        const english::Pronoun* pp = static_cast<const english::Pronoun*>(pos);
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetCaseDescription(pp->case_)
            << ", " << GetPronounTypeDescription(pp->type_)
-           << ", " << GetPersonDescription(pp->person_)
-           ;
+           << ", " << GetPersonDescription(pp->person_);
         break;
       }
       case EnglishPos::PRONOUN_ADJECTIVE_PS: {
-        const PronounAdjective* pp = static_cast<const PronounAdjective*>(pos);
+        const english::PronounAdjective* pp = static_cast<const english::PronounAdjective*>(pos);
         st << GetPosDescription(pp->GetPosTag())
            << ", " << GetNumberDescription(pp->number_)
            << ", " << GetPronounFormDescription(pp->form_)
-           << ", " << GetPronounTypeDescription(pp->type_)
-           ;
+           << ", " << GetPronounTypeDescription(pp->type_);
         break;
       }
       case EnglishPos::NUMERAL_PS:
@@ -91,8 +96,7 @@ struct EnglishDescription {
       case EnglishPos::ARTICLE_PS:
       case EnglishPos::PRONOUN_NOUN_PS:
       case EnglishPos::POSSESSIVE_PS:
-        st << GetPosDescription(pos->GetPosTag())
-           ;
+        st << GetPosDescription(pos->GetPosTag());
         break;
 
       default:
@@ -102,7 +106,7 @@ struct EnglishDescription {
   }
 
   /// Get part of speech description.
-  static std::string GetPosDescription(EnglishPos::PartOfSpeech pos) {
+  static std::string GetPosDescription(EnglishPos::PosTag pos) {
     switch (pos) {
       case EnglishPos::ADJECTIVE_PS:         return "adjective";
       case EnglishPos::ADVERB_PS:            return "abverb";
@@ -260,4 +264,4 @@ struct EnglishDescription {
   }
 };
 
-}}} // namespace factor, morpho, english.
+}} // namespace strutext, morpho.

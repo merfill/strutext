@@ -15,9 +15,9 @@
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/encode)
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/symbols)
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/automata)
-include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/morpho/morpholib)
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/morpho/models)
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/morpho/alphabets)
+include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/morpho/morpholib)
 
 set(UNIT_TEST_NAME morpholib-unit-test)
 set(UNIT_TEST_SOURCES

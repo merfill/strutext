@@ -26,12 +26,12 @@
 namespace strutext { namespace morpho {
 
 /// English morpho model base abstract class definition.
-struct EnglishPos : public Pos {
+struct EnglishPos : public PartOfSpeech {
   /// Type of smart pointer to the class object.
   typedef std::shared_ptr<EnglishPos> Ptr;
 
   /// Possible parts of speech.
-  enum PartOfSpeech {
+  enum PosTag {
     UNKNOWN_PS                = 0   ///< Unknown part of speech.
 
     , ADJECTIVE_PS            = 1
@@ -154,7 +154,7 @@ struct EnglishPos : public Pos {
   virtual ~EnglishPos() {}
 
   /// Get part of speech tag.
-  virtual PartOfSpeech GetPosTag() const = 0;
+  virtual PosTag GetPosTag() const = 0;
 
   /// Serialization implementaion.
   virtual void Serialize(uint32_t& out) const = 0;
@@ -163,16 +163,18 @@ struct EnglishPos : public Pos {
   virtual void Deserialize(const uint32_t& in) = 0;
 
   /// Write POS signature.
-  static void WritePosSign(PartOfSpeech pos, uint32_t& out) {
+  static void WritePosSign(PosTag pos, uint32_t& out) {
     // Write to lower 5 bits.
     out |= static_cast<uint32_t>(pos);
   }
 
   /// Read POS signature.
-  static PartOfSpeech ReadPosSign(const uint32_t& in) {
-    return PartOfSpeech(in & 0x1f);
+  static PosTag ReadPosSign(const uint32_t& in) {
+    return PosTag(in & 0x1f);
   }
 };
+
+namespace english {
 
 /// Noun class definition.
 struct Noun : public EnglishPos {
@@ -187,7 +189,7 @@ struct Noun : public EnglishPos {
   {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const {
+  PosTag GetPosTag() const {
     return NOUN_PS;
   }
 
@@ -247,7 +249,7 @@ struct Adjective : public EnglishPos {
   {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const {
+  PosTag GetPosTag() const {
     return ADJECTIVE_PS;
   }
 
@@ -295,7 +297,7 @@ struct Verb : public EnglishPos {
     , person_(UNKNOWN_PERSON) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return VERB_PS; }
+  PosTag GetPosTag() const { return VERB_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -341,7 +343,7 @@ struct Adverb : public EnglishPos {
   Adverb() : degree_(UNKNOWN_DEGREE) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return ADVERB_PS; }
+  PosTag GetPosTag() const { return ADVERB_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -385,7 +387,7 @@ struct Pronoun : public EnglishPos {
     , person_(UNKNOWN_PERSON) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PRONOUN_PS; }
+  PosTag GetPosTag() const { return PRONOUN_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -437,7 +439,7 @@ struct PronounAdjective : public EnglishPos {
     , type_(UNKNOWN_PNT) {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return PRONOUN_ADJECTIVE_PS; }
+  PosTag GetPosTag() const { return PRONOUN_ADJECTIVE_PS; }
 
   /**
    * \brief Serialization implementaion.
@@ -479,12 +481,12 @@ struct PronounAdjective : public EnglishPos {
 };
 
 /// Template class for poor pos.
-template <EnglishPos::PartOfSpeech pos>
+template <EnglishPos::PosTag pos>
 struct PoorPos : public EnglishPos {
   PoorPos() {}
 
   /// Get part of speech tag.
-  PartOfSpeech GetPosTag() const { return pos; }
+  PosTag GetPosTag() const { return pos; }
 
   /**
    * \brief Serialization implementaion.
@@ -512,7 +514,6 @@ struct PoorPos : public EnglishPos {
    * \param ib The buffer to write to.
    */
   void Deserialize(const uint32_t& ib) {}
-
 };
 
 /// Preposion type.
@@ -560,9 +561,9 @@ struct PosSerializer {
    * \brief Deserialization.
    * \param ob Buffer to read from.
    */
-  static Pos::Ptr Deserialize(const uint32_t& ob) {
-    EnglishPos::PartOfSpeech pos_tag = EnglishPos::ReadPosSign(ob);
-    Pos::Ptr pos;
+  static EnglishPos::Ptr Deserialize(const uint32_t& ob) {
+    EnglishPos::PosTag pos_tag = EnglishPos::ReadPosSign(ob);
+    EnglishPos::Ptr pos;
     switch (pos_tag) {
       case EnglishPos::NOUN_PS:
         pos = std::make_shared<Noun>();
@@ -618,4 +619,4 @@ struct PosSerializer {
   }
 };
 
-}} // namespace strutext, morpho.
+}}} // namespace strutext, morpho, english.

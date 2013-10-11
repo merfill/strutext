@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
+#include <cstddef>
 
 namespace strutext { namespace morpho {
 

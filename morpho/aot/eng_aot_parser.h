@@ -1,14 +1,26 @@
-/** Copyright &copy; 2011-2013, Ontologs.
- * \file   eng_aot_parser.h
+/** Copyright &copy; 2013, Vladimir Lapshin.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  * \brief  English attributes parser for AOT.
  * \author Vladimir Lapshin.
- * \date   02.04.2013
  */
 
 #pragma once
 
 #include <vector>
 #include <set>
+#include <string>
 
 #include <boost/algorithm/string.hpp>
 
@@ -16,24 +28,21 @@
 #include "eng_alphabet.h"
 #include "eng_model.h"
 
-namespace factor { namespace morpho { namespace aot {
-
-namespace m = factor::morpho;
-namespace em = factor::morpho::english;
+namespace strutext { namespace morpho {
 
 class EnglishAotParser : public AotParser {
   typedef std::set<std::string> MainFormCodeList;
 
   struct EnglishAttrsParser {
     EnglishAttrsParser()
-      : number_(em::EnglishPos::UNKNOWN_NUMBER)
-      , gender_(em::EnglishPos::UNKNOWN_GENDER)
-      , case_(em::EnglishPos::UNKNOWN_CASE)
-      , time_(em::EnglishPos::UNKNOWN_TIME)
-      , person_(em::EnglishPos::UNKNOWN_PERSON)
-      , animation_(em::EnglishPos::UNKNOWN_ANIMATION)
-      , degree_(em::EnglishPos::UNKNOWN_DEGREE)
-      , form_(em::EnglishPos::UNKNOWN_PNF)
+      : number_(EnglishPos::UNKNOWN_NUMBER)
+      , gender_(EnglishPos::UNKNOWN_GENDER)
+      , case_(EnglishPos::UNKNOWN_CASE)
+      , time_(EnglishPos::UNKNOWN_TIME)
+      , person_(EnglishPos::UNKNOWN_PERSON)
+      , animation_(EnglishPos::UNKNOWN_ANIMATION)
+      , degree_(EnglishPos::UNKNOWN_DEGREE)
+      , form_(EnglishPos::UNKNOWN_PNF)
       , narrative_(false)
       , geo_(false)
       , org_(false)
@@ -46,130 +55,94 @@ class EnglishAotParser : public AotParser {
 
       typedef std::set<std::string> AttrSet;
       AttrSet attr_set;
-      for (unsigned i = 0; i < attrs.size(); ++i) {
+      for (size_t i = 0; i < attrs.size(); ++i) {
         attr_set.insert(attrs[i]);
       }
 
       // Go through list of attributes.
-      for (unsigned i = 0; i < attrs.size(); ++i) {
+      for (size_t i = 0; i < attrs.size(); ++i) {
         // Gender.
         if (attrs[i] == "f") {
-          gender_ = em::EnglishPos::MASCULINE_GENDER;
+          gender_ = EnglishPos::MASCULINE_GENDER;
         } else if (attrs[i] == "m") {
-          gender_ = em::EnglishPos::FEMININE_GENDER;
-        }
-
-        // Number
-        else if (attrs[i] == "sg") {
-          number_ = (em::EnglishPos::Number)(number_ | em::EnglishPos::SINGULAR_NUMBER);
+          gender_ = EnglishPos::FEMININE_GENDER;
+        } else if (attrs[i] == "sg") {
+          number_ = (EnglishPos::Number)(number_ | EnglishPos::SINGULAR_NUMBER);
         } else if (attrs[i] == "pl") {
-          number_ = (em::EnglishPos::Number)em::EnglishPos::PLURAL_NUMBER;
+          number_ = (EnglishPos::Number)EnglishPos::PLURAL_NUMBER;
         } else if (attrs[i] == "uncount") {
-          number_ = (em::EnglishPos::Number)em::EnglishPos::UNCOUNT_NUMBER;
+          number_ = (EnglishPos::Number)EnglishPos::UNCOUNT_NUMBER;
         } else if (attrs[i] == "mass") {
-          number_ = (em::EnglishPos::Number)em::EnglishPos::MASS_NUMBER;
-        }
-
-        // Time.
-        else if (attrs[i] == "inf") {
-          time_ = em::EnglishPos::INFINITIVE_TIME;
+          number_ = (EnglishPos::Number)EnglishPos::MASS_NUMBER;
+        } else if (attrs[i] == "inf") {
+          time_ = EnglishPos::INFINITIVE_TIME;
         } else if (attrs[i] == "prsa") {
-          time_ = em::EnglishPos::PRESENT_TIME;
+          time_ = EnglishPos::PRESENT_TIME;
         } else if (attrs[i] == "pasa") {
-          time_ = em::EnglishPos::PAST_TIME;
+          time_ = EnglishPos::PAST_TIME;
         } else if (attrs[i] == "pp") {
-          time_ = em::EnglishPos::PASTPARTICIPLE_TIME;
+          time_ = EnglishPos::PASTPARTICIPLE_TIME;
         } else if (attrs[i] == "ing") {
-          time_ = em::EnglishPos::GERUND_TIME;
+          time_ = EnglishPos::GERUND_TIME;
         } else if (attrs[i] == "fut") {
-          time_ = em::EnglishPos::FUTURETOBE_TIME;
+          time_ = EnglishPos::FUTURETOBE_TIME;
         } else if (attrs[i] == "if") {
-          time_ = em::EnglishPos::IFTOBE_TIME;
-        }
-
-        // Case.
-        else if (attrs[i] == "nom") {
-          case_ = em::EnglishPos::NOMINATIVE_CASE;
+          time_ = EnglishPos::IFTOBE_TIME;
+        } else if (attrs[i] == "nom") {
+          case_ = EnglishPos::NOMINATIVE_CASE;
         } else if (attrs[i] == "obj") {
-          case_ = em::EnglishPos::OBJECT_CASE;
-        }
-
-        // Pronoun degree.
-        else if (attrs[i] == "pos") {
-          degree_ = em::EnglishPos::POSITIVE_DEGREE;
+          case_ = EnglishPos::OBJECT_CASE;
+        } else if (attrs[i] == "pos") {
+          degree_ = EnglishPos::POSITIVE_DEGREE;
         } else if (attrs[i] == "comp") {
-          degree_ = em::EnglishPos::COMPARATIVE_DEGREE;
+          degree_ = EnglishPos::COMPARATIVE_DEGREE;
         } else if (attrs[i] == "sup") {
-          degree_ = em::EnglishPos::SUPERLATIVE_DEGREE;
-        }
-
-        // Pronoun form.
-        else if (attrs[i] == "pred") {
-          form_ = em::EnglishPos::PREDICATIVE_PNF;
+          degree_ = EnglishPos::SUPERLATIVE_DEGREE;
+        } else if (attrs[i] == "pred") {
+          form_ = EnglishPos::PREDICATIVE_PNF;
         } else if (attrs[i] == "attr") {
-          form_ = em::EnglishPos::ATTRIBUTIVE_PNF;
-        }
-
-        // Pronoun Type.
-        else if (attrs[i] == "pers") {
-          type_ = em::EnglishPos::PERSONAL_PNT;
+          form_ = EnglishPos::ATTRIBUTIVE_PNF;
+        } else if (attrs[i] == "pers") {
+          type_ = EnglishPos::PERSONAL_PNT;
         } else if (attrs[i] == "poss") {
-          type_ = em::EnglishPos::POSSESSIVE_PNT;
+          type_ = EnglishPos::POSSESSIVE_PNT;
         } else if (attrs[i] == "ref") {
-          type_ = em::EnglishPos::REFLEXIVE_PNT;
+          type_ = EnglishPos::REFLEXIVE_PNT;
         } else if (attrs[i] == "dem") {
-          type_ = em::EnglishPos::DEMONSTRATIVE_PNT;
-        }
-
-        // Person.
-        else if (attrs[i] == "1") {
-          person_ = (em::EnglishPos::Person)(person_ | em::EnglishPos::FIRST_PERSON);
+          type_ = EnglishPos::DEMONSTRATIVE_PNT;
+        } else if (attrs[i] == "1") {
+          person_ = (EnglishPos::Person)(person_ | EnglishPos::FIRST_PERSON);
         } else if (attrs[i] == "2") {
-          person_ = (em::EnglishPos::Person)(person_ | em::EnglishPos::SECOND_PERSON);
+          person_ = (EnglishPos::Person)(person_ | EnglishPos::SECOND_PERSON);
         } else if (attrs[i] == "3") {
-          person_ = (em::EnglishPos::Person)(person_ | em::EnglishPos::THIRD_PERSON);
-        }
-
-        // Narrative.
-        else if (attrs[i] == "narr") {
+          person_ = (EnglishPos::Person)(person_ | EnglishPos::THIRD_PERSON);
+        } else if (attrs[i] == "narr") {
           narrative_ = true;
-        }
-
-        // Animation.
-        else if (attrs[i] == "anim") {
-          animation_ = em::EnglishPos::ANIMATE_ANIMATION;
-        }
-
-        // Geo.
-        else if (attrs[i] == "geo") {
+        } else if (attrs[i] == "anim") {
+          animation_ = EnglishPos::ANIMATE_ANIMATION;
+        } else if (attrs[i] == "geo") {
           geo_ = true;
-        }
-
-        // Org.
-        else if (attrs[i] == "org") {
+        } else if (attrs[i] == "org") {
           org_ = true;
-        }
-
-        // Name.
-        else if (attrs[i] == "name") {
+        } else if (attrs[i] == "name") {
           name_ = true;
         }
       }
     }
 
-    em::EnglishPos::Number      number_;
-    em::EnglishPos::Gender      gender_;
-    em::EnglishPos::PronounType type_;
-    em::EnglishPos::Case        case_;
-    em::EnglishPos::Time        time_;
-    em::EnglishPos::Person      person_;
-    em::EnglishPos::Animation   animation_;
-    em::EnglishPos::Degree      degree_;
-    em::EnglishPos::PronounForm form_;
-    bool                        narrative_;
-    bool                        geo_;
-    bool                        org_;
-    bool                        name_;
+    EnglishPos::Number      number_;
+    EnglishPos::Gender      gender_;
+    EnglishPos::PronounType type_;
+    EnglishPos::Case        case_;
+    EnglishPos::Time        time_;
+    EnglishPos::Person      person_;
+    EnglishPos::Animation   animation_;
+    EnglishPos::Degree      degree_;
+    EnglishPos::PronounForm form_;
+    bool                    narrative_;
+    bool                    geo_;
+    bool                    org_;
+    bool                    name_;
   };
 
 public:
@@ -212,70 +185,70 @@ public:
 
     // Extract morphological attributes.
     EnglishAttrsParser attrs;
-    if (fields.size() >= 4 ) {
+    if (fields.size() >= 4) {
       attrs.Parse(fields[3]);
     }
 
     // Read part of speech.
-    em::EnglishPos::Ptr pos;
+    EnglishPos::Ptr pos;
     if (fields[2] == "NOUN") { // noun.
-      pos = em::EnglishPos::Ptr(new em::Noun());
-      em::Noun* pp = static_cast<em::Noun*>(pos.get());
+      pos = EnglishPos::Ptr(new english::Noun());
+      english::Noun* pp = static_cast<english::Noun*>(pos.get());
       pp->number_     = attrs.number_;
       pp->gender_     = attrs.gender_;
       pp->case_       = attrs.case_;
       pp->animation_  = attrs.animation_;
       pp->narrative_  = attrs.narrative_;
     } else if (fields[2] == "ADJECTIVE") {
-      pos = em::EnglishPos::Ptr(new em::Adjective());
-      em::Adjective* pp = static_cast<em::Adjective*>(pos.get());
+      pos = EnglishPos::Ptr(new english::Adjective());
+      english::Adjective* pp = static_cast<english::Adjective*>(pos.get());
       pp->degree_    = attrs.degree_;
     } else if (fields[2] == "ADVERB") {
-      pos = em::EnglishPos::Ptr(new em::Adverb());
-      em::Adverb* pp = static_cast<em::Adverb*>(pos.get());
+      pos = EnglishPos::Ptr(new english::Adverb());
+      english::Adverb* pp = static_cast<english::Adverb*>(pos.get());
       pp->degree_     = attrs.degree_;
     } else if (fields[2] == "VERB" or fields[2] == "MOD" or fields[2] == "VBE") {
-      pos = em::EnglishPos::Ptr(new em::Verb());
-      em::Verb* pp = static_cast<em::Verb*>(pos.get());
+      pos = EnglishPos::Ptr(new english::Verb());
+      english::Verb* pp = static_cast<english::Verb*>(pos.get());
       pp->time_       = attrs.time_;
       pp->gender_     = attrs.gender_;
       pp->person_     = attrs.person_;
     } else if (fields[2] == "PN") {
-      pos = em::EnglishPos::Ptr(new em::Pronoun());
-      em::Pronoun* pp = static_cast<em::Pronoun*>(pos.get());
+      pos = EnglishPos::Ptr(new english::Pronoun());
+      english::Pronoun* pp = static_cast<english::Pronoun*>(pos.get());
       pp->number_     = attrs.number_;
       pp->case_       = attrs.case_;
       pp->type_       = attrs.type_;
       pp->person_     = attrs.person_;
     } else if (fields[2] == "PN_ADJ") {
-      pos = em::EnglishPos::Ptr(new em::PronounAdjective());
-      em::PronounAdjective* pp = static_cast<em::PronounAdjective*>(pos.get());
+      pos = EnglishPos::Ptr(new english::PronounAdjective());
+      english::PronounAdjective* pp = static_cast<english::PronounAdjective*>(pos.get());
       pp->number_     = attrs.number_;
       pp->form_       = attrs.form_;
       pp->type_       = attrs.type_;
     } else if (fields[2] == "NUMERAL") {
-      pos = em::EnglishPos::Ptr(new em::Numeral());
+      pos = EnglishPos::Ptr(new english::Numeral());
     } else if (fields[2] == "PRON") {
-      pos = em::EnglishPos::Ptr(new em::PronounNoun());
+      pos = EnglishPos::Ptr(new english::PronounNoun());
     } else if (fields[2] == "CONJ") {
-      pos = em::EnglishPos::Ptr(new em::Conjuction());
+      pos = EnglishPos::Ptr(new english::Conjuction());
     } else if (fields[2] == "INT") {
-      pos = em::EnglishPos::Ptr(new em::Interjection());
+      pos = EnglishPos::Ptr(new english::Interjection());
     } else if (fields[2] == "PREP") {
-      pos = em::EnglishPos::Ptr(new em::Preposition());
+      pos = EnglishPos::Ptr(new english::Preposition());
     } else if (fields[2] == "PART") {
-      pos = em::EnglishPos::Ptr(new em::Particle());
+      pos = EnglishPos::Ptr(new english::Particle());
     } else if (fields[2] == "ARTICLE") {
-      pos = em::EnglishPos::Ptr(new em::Article());
+      pos = EnglishPos::Ptr(new english::Article());
     } else if (fields[2] == "ORDNUM") {
-      pos = em::EnglishPos::Ptr(new em::NumeralOrdinal());
+      pos = EnglishPos::Ptr(new english::NumeralOrdinal());
     } else if (fields[2] == "POSS") {
-      pos = em::EnglishPos::Ptr(new em::Possessive());
+      pos = EnglishPos::Ptr(new english::Possessive());
     }
 
     if (pos) {
       uint32_t ob = 0;
-      em::PosSerializer::Serialize(pos, ob);
+      english::PosSerializer::Serialize(pos, ob);
       return ob;
     }
     return 0;
@@ -293,4 +266,4 @@ private:
   MainFormCodeList mf_codes_;
 };
 
-}}} // namespace factor, morpho, aot.
+}} // namespace strutext, morpho.
