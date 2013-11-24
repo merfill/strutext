@@ -13,9 +13,11 @@
 #   limitations under the License.
 
 include_directories(${Log4cplus_INCLUDE_DIR})
+include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/symbols)
+include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/encode)
 include_directories(${STRUTEXT_ROOT_SOURCE_DIR}/utility)
 
-set(UNIT_TEST_NAME ngram-iterator-unit-test)
+set(UNIT_TEST_NAME utility-unit-test)
 set(UNIT_TEST_SOURCES
   ${STRUTEXT_ROOT_SOURCE_DIR}/ut-data/ut_main.cpp
   test.cpp
@@ -24,6 +26,7 @@ set(UNIT_TEST_SOURCES
 add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES})
 
 target_link_libraries(${UNIT_TEST_NAME}
+  symbols
   ${Log4cplus_LIBRARY}
   ${Boost_REGEX_LIBRARY}
   ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

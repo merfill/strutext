@@ -45,27 +45,27 @@ BOOST_AUTO_TEST_CASE(Encode_Utf8Iterator_Position) {
   it = Utf8Iterator(s.begin(), s.end());
   BOOST_CHECK_EQUAL(it.GetBytePos(), 1);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 1);
-  BOOST_CHECK_EQUAL(it->len_, 1);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 1);
   ++it;
   BOOST_CHECK_EQUAL(it.GetBytePos(), 2);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 2);
-  BOOST_CHECK_EQUAL(it->len_, 1);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 1);
   ++it;
   BOOST_CHECK_EQUAL(it.GetBytePos(), 4);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 3);
-  BOOST_CHECK_EQUAL(it->len_, 2);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 2);
   ++it;
   BOOST_CHECK_EQUAL(it.GetBytePos(), 6);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 4);
-  BOOST_CHECK_EQUAL(it->len_, 2);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 2);
   ++it;
   BOOST_CHECK_EQUAL(it.GetBytePos(), 8);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 5);
-  BOOST_CHECK_EQUAL(it->len_, 2);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 2);
   ++it;
   BOOST_CHECK_EQUAL(it.GetBytePos(), 11);
   BOOST_CHECK_EQUAL(it.GetSymbolPos(), 6);
-  BOOST_CHECK_EQUAL(it->len_, 3);
+  BOOST_CHECK_EQUAL(it.GetChainLen(), 3);
 }
 
 BOOST_AUTO_TEST_CASE(Encode_Utf8Iterator_TextExtract) {

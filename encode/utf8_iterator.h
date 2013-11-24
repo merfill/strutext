@@ -83,7 +83,7 @@ class Utf8Iterator : public  boost::iterator_facade<
     Utf8Iterator<ByteIterator>,
     Utf8Symbol,
     boost::forward_traversal_tag,
-    const Utf8Symbol&> {
+    uint32_t> {
   // Declaration for iterator_facade.
   friend class boost::iterator_core_access;
 
@@ -226,7 +226,7 @@ class Utf8Iterator : public  boost::iterator_facade<
   }
 
   /// Dereference implementation.
-  const Utf8Symbol& dereference() const { return symbol_; }
+  uint32_t dereference() const { return symbol_.utf32_; }
 
 public:
   /// End of stream initialization.

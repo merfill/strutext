@@ -18,16 +18,20 @@
  * \date   23.11.2013
  */
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include <boost/test/unit_test.hpp>
 
+#include "utf8_iterator.h"
+#include "utf8_generator.h"
 #include "ngram_iterator.h"
+#include "symbol_iterator.h"
 
 namespace strutext { namespace utility {
 
-BOOST_AUTO_TEST_CASE(NgrammIterator_Symbols_Ansii) {
+BOOST_AUTO_TEST_CASE(Utility_NgrammIterator_Symbols) {
   std::string text = "abcde";
   typedef NgramIterator<char, std::string::const_iterator> NgramIteratorImpl;
   std::vector<std::string> result;
@@ -51,6 +55,30 @@ BOOST_AUTO_TEST_CASE(NgrammIterator_Symbols_Ansii) {
   BOOST_CHECK(result[12] == "d");
   BOOST_CHECK(result[13] == "de");
   BOOST_CHECK(result[14] == "e");
+}
+
+BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_EnglishGeneral) {
+  typedef SymbolAlphaIterator<std::string::const_iterator> IteratorImpl;
+  std::string text = "   !:,213213Hello,]]][[[[    World  !   ";
+  AlphaFilter filter;
+  std::string result;
+  for (IteratorImpl it(text.begin(), text.end(), filter, LowerAndSpace), end; it != end; ++it) {
+    result += char(*it);
+  }
+  BOOST_CHECK(result == " hello world ");
+}
+
+BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_RussianGeneral) {
+  typedef encode::Utf8Iterator<std::string::const_iterator> Utf8IteratorImpl;
+  typedef SymbolAlphaIterator<Utf8IteratorImpl> IteratorImpl;
+  std::string text = "    12321321  ,,, \\///!!! Здравствуй, [[[ Мир  ]]]  !!!!";
+  AlphaFilter filter;
+  std::string result;
+  Utf8IteratorImpl utf8_begin(text.begin(), text.end()), utf8_end;
+  for (IteratorImpl it(utf8_begin, utf8_end, filter, LowerAndSpace), end; it != end; ++it) {
+    encode::GetUtf8Sequence(*it, std::back_inserter(result));
+  }
+  BOOST_CHECK(result == " здравствуй мир ");
 }
 
 }} // namespace strutext, utility.
