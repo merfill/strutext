@@ -22,14 +22,14 @@
 
 namespace strutext { namespace automata {
 
-/// Chain identifier type.
-typedef Attribute ChainId;
-
 /// Trie implementation basing on attribute FSM.
-template <class Trans>
-struct Trie : public AttributeFsm<Trans> {
+template <class Trans, typename Attribute>
+struct Trie : public AttributeFsm<Trans, Attribute> {
+  /// Chain identifier type.
+  typedef Attribute ChainId;
+
   /// Attribute FSM type.
-  typedef AttributeFsm<Trans> AttributeFsmImpl;
+  typedef AttributeFsm<Trans, Attribute> AttributeFsmImpl;
 
   /// Default initialization.
   explicit Trie(size_t rsize = AttributeFsmImpl::kReservedStateTableSize) : AttributeFsmImpl(rsize) {}
@@ -96,7 +96,7 @@ struct Trie : public AttributeFsm<Trans> {
    * \result      The reference to the list of attributes of the chain if any.
    */
   template <typename SymbolIterator>
-  const AttributeList& Search(SymbolIterator begin, SymbolIterator end) const {
+  const typename AttributeFsmImpl::AttributeList& Search(SymbolIterator begin, SymbolIterator end) const {
     StateId state = kStartState;
     for (auto it = begin; state !=  kInvalidState and it != end; ++it) {
       state = AttributeFsmImpl::Go(state, *it);

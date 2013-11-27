@@ -60,7 +60,6 @@ public:
     }
 
     // Go through the moves.
-    typedef typename Transitions::TransTable::const_iterator MoveIterator;
     for (auto move : moves.trans_table_) {
       // Write symbol.
       os.write((const char*)&(move.first), sizeof(typename Transitions::CharType));
@@ -242,13 +241,13 @@ struct FsmSerializer {
 };
 
 /// FSM with attributes serialization.
-template <class TransImpl>
+template <class T>
 struct AttrFsmSerializer {
   /// Automaton type.
-  typedef AttributeFsm<TransImpl> Automaton;
+  typedef T Automaton;
 
   /// Serializer type.
-  typedef FsmSerializer<TransImpl> FsmSerializerImpl;
+  typedef FsmSerializer<typename Automaton::Transition> FsmSerializerImpl;
 
   /**
    * \brief Serialization implementation.
@@ -272,7 +271,7 @@ struct AttrFsmSerializer {
 
       // Write attributes.
       for (unsigned j = 0; j < num_of_attrs; ++j) {
-        Attribute attr = automaton.states_attr_[i][j];
+        typename Automaton::Attribute attr = automaton.states_attr_[i][j];
         os.write(reinterpret_cast<char*>(&attr), sizeof attr);
       }
     }
@@ -294,7 +293,7 @@ struct AttrFsmSerializer {
     automaton.states_attr_.resize(num_of_states + 1);
 
     // Prepare buffer to read attributes.
-    std::vector<Attribute> buffer;
+    std::vector<typename Automaton::Attribute> buffer;
 
     // Read attributes.
     for (unsigned i = 1; i <= num_of_states; ++i) {
@@ -305,7 +304,7 @@ struct AttrFsmSerializer {
       // Read attributes of the state.
       buffer.resize(num_of_attrs);
       automaton.states_attr_[i].resize(num_of_attrs);
-      is.read(reinterpret_cast<char*>(&buffer[0]), sizeof(Attribute) * buffer.size());
+      is.read(reinterpret_cast<char*>(&buffer[0]), sizeof(typename Automaton::Attribute) * buffer.size());
       for (unsigned j = 0; j < num_of_attrs; ++j) {
         automaton.states_attr_[i][j] = buffer[j];
       }
@@ -318,7 +317,7 @@ template <class AcTrie>
 class AcSerializer {
 public:
   /// Attribute serializer type.
-  typedef AttrFsmSerializer<typename AcTrie::Transitions> AttrFsmSerializerImpl;
+  typedef AttrFsmSerializer<AcTrie> AttrFsmSerializerImpl;
 
   /**
    * \brief Serialization implementation.

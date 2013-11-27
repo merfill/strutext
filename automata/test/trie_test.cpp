@@ -16,6 +16,7 @@
  * \author Vladimir Lapshin.
  */
 
+#include <cstdint>
 #include <sstream>
 #include <string>
 
@@ -28,14 +29,14 @@
 namespace {
 
 // Trie type definitions.
-typedef strutext::automata::FlexTransitions<char>    Trans;
-typedef strutext::automata::Trie<Trans>              FlexTrie;
-typedef strutext::automata::AttrFsmSerializer<Trans> Serializer;
+typedef strutext::automata::FlexTransitions<char>       Trans;
+typedef strutext::automata::Trie<Trans, uint64_t>       FlexTrie;
+typedef strutext::automata::AttrFsmSerializer<FlexTrie> Serializer;
 
 // Utilities.
 struct TrieUtils {
   // Search chain in the passed trie.
-  static bool CheckCnainInTrie(const std::string& chain, strutext::automata::Attribute attr, const FlexTrie& trie) {
+  static bool CheckCnainInTrie(const std::string& chain, FlexTrie::Attribute attr, const FlexTrie& trie) {
     strutext::automata::StateId state = strutext::automata::kStartState;
     for (auto it = chain.begin(); it != chain.end(); ++it) {
       state = trie.Go(state, *it);
@@ -50,7 +51,7 @@ struct TrieUtils {
     }
 
     // Check is there the passed value in the attribute list.
-    const strutext::automata::AttributeList& attrs = trie.GetStateAttributes(state);
+    const FlexTrie::AttributeList& attrs = trie.GetStateAttributes(state);
     for (auto attribute : attrs) {
       if (attribute == attr) {
         return true;
@@ -62,7 +63,7 @@ struct TrieUtils {
   }
 
   // Adding a chain in the trie.
-  static void AddChainToTrie(const std::string& chain, strutext::automata::Attribute attr, FlexTrie& trie) {
+  static void AddChainToTrie(const std::string& chain, FlexTrie::Attribute attr, FlexTrie& trie) {
     trie.AddChain(chain.begin(), chain.end(), attr);
   }
 };

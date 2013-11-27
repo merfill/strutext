@@ -34,7 +34,7 @@ class AcSymbolIterator : public boost::iterator_facade<
   AcSymbolIterator<AcTrie, SymbolIterator>,
   StateId,
   boost::forward_traversal_tag,
-  const AttributeList&> {
+  const typename AcTrie::AttributeList&> {
 private:
   /// Declaration for iterator_facade.
   friend class boost::iterator_core_access;
@@ -44,6 +44,12 @@ private:
 
   /// Aho-Corasick trie searcher type.
   typedef AcProcessor<AcTrie> AcProcessorImpl;
+
+  /// Type of chain identifier.
+  typedef typename AcTrie::ChainId ChainId;
+
+  /// Type of list of attributes.
+  typedef typename AcTrie::AttributeList AttributeList;
 
 public:
   /**
@@ -112,9 +118,9 @@ private:
 template <class AcTrie, typename SymbolIterator>
 class AcChainIterator: public boost::iterator_facade<
   AcChainIterator<AcTrie, SymbolIterator>,
-  ChainId,
+  typename AcTrie::ChainId,
   boost::forward_traversal_tag,
-  ChainId> {
+  typename AcTrie::ChainId> {
 private:
   // Declaration for iterator_facade.
   friend class boost::iterator_core_access;
@@ -124,6 +130,12 @@ private:
 
   /// Symbol type.
   typedef typename AcTrie::CharType SymbolType;
+
+  /// Type of chain identifier.
+  typedef typename AcTrie::ChainId ChainId;
+
+  /// Type of list of attributes.
+  typedef typename AcTrie::AttributeList AttributeList;
 
 public:
   /**

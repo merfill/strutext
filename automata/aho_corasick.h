@@ -29,13 +29,13 @@ namespace strutext { namespace automata {
 /**
  * \brief Aho-Corasick trie implementation.
  */
-template <class TransImpl>
-struct AhoCorasickTrie : public Trie<TransImpl> {
+template <class TransImpl, typename Attribute>
+struct AhoCorasickTrie : public Trie<TransImpl, Attribute> {
   /// Move table type.
   typedef TransImpl Transitions;
 
   /// Trie type.
-  typedef Trie<TransImpl> TrieImpl;
+  typedef Trie<TransImpl, Attribute> TrieImpl;
 
   /// Fail transitions set type.
   typedef std::vector<StateId> FailMoveList;
@@ -119,11 +119,11 @@ public:
       while (fstate != kStartState) {
         // Add the chain index to the attribute list if the state is acceptable.
         if (ac_trie.IsAcceptable(fstate)) {
-          const AttributeList& chain_ids = ac_trie.GetStateAttributes(fstate);
+          const typename AcTrie::AttributeList& chain_ids = ac_trie.GetStateAttributes(fstate);
           // Go through identifiers.
           for (auto chain_id : chain_ids) {
             // Search the identifier in the attribute list and add if the identifier hasn't been found.
-            const AttributeList& ids = ac_trie.GetStateAttributes(state);
+            const typename AcTrie::AttributeList& ids = ac_trie.GetStateAttributes(state);
             if (std::find(ids.begin(), ids.end(), chain_id) == ids.end()) {
               ac_trie.AddAttribute(state, chain_id);
             }

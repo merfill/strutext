@@ -26,29 +26,32 @@
 namespace strutext { namespace automata {
 
 /// Serializer forward declaration.
-template <class TransImpl> struct AttrFsmSerializer;
-
-/// Type of the attribute.
-typedef uint64_t Attribute;
-
-/// Attribute list type.
-typedef std::vector<Attribute> AttributeList;
+template <class> struct AttrFsmSerializer;
 
 /**
  * \brief FSM with attributes definition.
  *
  * State attribute is 64-bit interger. An each state contains a list of such attributes.
  */
-template <class Trans>
-struct AttributeFsm : public FiniteStateMachine<Trans> {
+template <class T1, typename T2>
+struct AttributeFsm : public FiniteStateMachine<T1> {
+  /// Type of transition table.
+  typedef T1 Transition;
+
+  /// Type of the attribute.
+  typedef T2 Attribute;
+
   /// FSM implementation type.
-  typedef FiniteStateMachine<Trans> FsmImpl;
+  typedef FiniteStateMachine<Transition> FsmImpl;
+
+  /// Attribute list type.
+  typedef std::vector<Attribute> AttributeList;
 
   /// State attribute list type.
   typedef std::vector<AttributeList> StateAttributeList;
 
   // Make serializer to be friend.
-  friend struct AttrFsmSerializer<Trans>;
+  friend struct AttrFsmSerializer<AttributeFsm<Transition, Attribute>>;
 
   /// Default initialization.
   explicit AttributeFsm(size_t rsize = FsmImpl::kReservedStateTableSize)

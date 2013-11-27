@@ -16,6 +16,7 @@
  * \author Vladimir Lapshin.
  */
 
+#include <cstdint>
 #include <string>
 #include <sstream>
 
@@ -30,7 +31,7 @@ namespace {
 
 // Type definitions.
 typedef strutext::automata::FlexTransitions<char>                                 Trans;
-typedef strutext::automata::AhoCorasickTrie<Trans>                                AcTrie;
+typedef strutext::automata::AhoCorasickTrie<Trans, uint64_t>                      AcTrie;
 typedef strutext::automata::FailMoveGenerator<AcTrie>                             AcTrieGenerator;
 typedef strutext::automata::AcProcessor<AcTrie>                                   AcTrieProcessor;
 typedef strutext::automata::AcSerializer<AcTrie>                                  AcSerializer;
@@ -40,7 +41,7 @@ typedef strutext::automata::AcChainIterator<AcTrie, std::string::const_iterator>
 // Utilities.
 struct TrieUtils {
   // Addin a chain to the trie.
-  static void AddChainToTrie(const std::string& chain, strutext::automata::Attribute attr, AcTrie& trie) {
+  static void AddChainToTrie(const std::string& chain, AcTrie::Attribute attr, AcTrie& trie) {
     trie.AddChain(chain.begin(), chain.end(), attr);
   }
 };
@@ -65,7 +66,7 @@ BOOST_AUTO_TEST_CASE(Automata_AcTrie_Search) {
   strutext::automata::StateId state = strutext::automata::kStartState;
   for (size_t i = 0; i < text.length(); ++i) {
     state = searcher.Move(state, text[i]);
-    const strutext::automata::AttributeList& st_attrs = trie.GetStateAttributes(state);
+    const AcTrie::AttributeList& st_attrs = trie.GetStateAttributes(state);
     switch (i) {
       case 0: case 1: case 3: // There must be found nothing.
         BOOST_CHECK(st_attrs.size() == 0);
@@ -134,7 +135,7 @@ BOOST_AUTO_TEST_CASE(Automata_AcTrie_Serialize) {
   strutext::automata::StateId state = strutext::automata::kStartState;
   for (size_t i = 0; i < text.length(); ++i) {
     state = searcher.Move(state, text[i]);
-    const strutext::automata::AttributeList& st_attrs = trie.GetStateAttributes(state);
+    const AcTrie::AttributeList& st_attrs = trie.GetStateAttributes(state);
     switch (i) {
       case 0: case 1: case 2: case 4: // Nothing should be found.
         BOOST_CHECK(st_attrs.size() == 0);

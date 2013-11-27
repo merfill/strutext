@@ -130,11 +130,14 @@ class Morphologist : public MorphologistBase {
   /// Type of transition table.
   typedef strutext::automata::FlexTransitions<Code> MoveTable;
 
+  /// Type of attribute of the state.
+  typedef uint64_t Attribute;
+
   /// Trie type definition.
-  typedef strutext::automata::Trie<MoveTable> Trie;
+  typedef strutext::automata::Trie<MoveTable, Attribute> Trie;
 
   /// Trie serializer type definition.
-  typedef strutext::automata::AttrFsmSerializer<MoveTable> TrieSerializer;
+  typedef strutext::automata::AttrFsmSerializer<Trie> TrieSerializer;
 
   /// Map of automata 64bit attribute for morphology.
   struct AttrMap {
@@ -164,11 +167,11 @@ public:
     // attribute.
 
     // Try starts with empty bases
-    typedef std::list<std::pair<strutext::automata::Attribute, size_t> > BaseList;
+    typedef std::list<std::pair<Attribute, size_t> > BaseList;
     BaseList base_list;
     strutext::automata::StateId state = strutext::automata::kStartState;
     if (bases_trie_.IsAcceptable(state))  {
-      const strutext::automata::AttributeList& attrs = bases_trie_.GetStateAttributes(state);
+      const typename Trie::AttributeList& attrs = bases_trie_.GetStateAttributes(state);
       for (size_t i = 0; i < attrs.size(); ++i) {
         base_list.push_back(std::make_pair(attrs[i], 0));
       }
@@ -183,7 +186,7 @@ public:
       if (state != strutext::automata::kInvalidState) {
         state = bases_trie_.Go(state, c);
         if (bases_trie_.IsAcceptable(state))  {
-          const strutext::automata::AttributeList& attrs = bases_trie_.GetStateAttributes(state);
+          const typename Trie::AttributeList& attrs = bases_trie_.GetStateAttributes(state);
           for (size_t i = 0; i < attrs.size(); ++i) {
             base_list.push_back(std::make_pair(attrs[i], code_str.size()));
           }
