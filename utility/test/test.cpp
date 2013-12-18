@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_EnglishGeneral) {
   AlphaFilter filter;
   std::string result;
   for (IteratorImpl it(text.begin(), text.end(), filter, LowerAndSpace), end; it != end; ++it) {
-    result += char(*it);
+    result += static_cast<char>(*it);
   }
   BOOST_CHECK(result == " hello world ");
 }

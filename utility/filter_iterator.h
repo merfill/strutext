@@ -56,7 +56,8 @@ public:
    * \param transform Transform algoritm implementation.
    */
   FilterIterator(Iterator begin, Iterator end, Filter filter, Transform transform)
-    : filter_(filter)
+    : symbol_()
+    , filter_(filter)
     , transform_(transform)
     , it_(begin)
     , end_(end)
@@ -65,7 +66,9 @@ public:
   }
 
   /// Default initialization.
-  FilterIterator() : is_end_(true) {}
+  FilterIterator()
+    : symbol_()
+    , is_end_(true) {}
 
 private:
   void increment() {
