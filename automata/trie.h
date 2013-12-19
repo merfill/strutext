@@ -69,7 +69,7 @@ struct Trie : public AttributeFsm<Trans, Attribute> {
   StateId AddChain(SymbolIterator begin, SymbolIterator end) {
     // Go through the chain and add moves if any.
     StateId state = kStartState;
-    for (auto it = begin; it != end; ++it) {
+    for (SymbolIterator it = begin; it != end; ++it) {
       // Moving by the symbol.
       StateId state_to = AttributeFsmImpl::Go(state, *it);
 
@@ -98,7 +98,7 @@ struct Trie : public AttributeFsm<Trans, Attribute> {
   template <typename SymbolIterator>
   const typename AttributeFsmImpl::AttributeList& Search(SymbolIterator begin, SymbolIterator end) const {
     StateId state = kStartState;
-    for (auto it = begin; state !=  kInvalidState and it != end; ++it) {
+    for (SymbolIterator it = begin; state !=  kInvalidState and it != end; ++it) {
       state = AttributeFsmImpl::Go(state, *it);
     }
     return AttributeFsmImpl::GetStateAttributes(state);

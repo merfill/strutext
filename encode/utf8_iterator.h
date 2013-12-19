@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <cstring>
 #include <algorithm>
 

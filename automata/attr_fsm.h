@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <vector>
 
 #include "fsm.h"
@@ -51,7 +52,7 @@ struct AttributeFsm : public FiniteStateMachine<T1> {
   typedef std::vector<AttributeList> StateAttributeList;
 
   // Make serializer to be friend.
-  friend struct AttrFsmSerializer<AttributeFsm<Transition, Attribute>>;
+  friend struct AttrFsmSerializer<AttributeFsm<Transition, Attribute> >;
 
   /// Default initialization.
   explicit AttributeFsm(size_t rsize = FsmImpl::kReservedStateTableSize)

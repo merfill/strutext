@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 
 #include "symbols.h"
 
@@ -86,7 +86,7 @@ inline ByteIterator GetUtf8Sequence(strutext::symbols::SymbolCode code, ByteIter
  */
 template <typename Utf32Iterator, typename ByteIterator>
 inline ByteIterator GetUtf8Sequence(Utf32Iterator begin, Utf32Iterator end, ByteIterator oi) {
-  for (auto it = begin; it != end; ++it) {
+  for (Utf32Iterator it = begin; it != end; ++it) {
     oi = GetUtf8Sequence(*it, oi);
   }
   return oi;

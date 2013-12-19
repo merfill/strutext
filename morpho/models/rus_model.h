@@ -18,8 +18,10 @@
 
 #pragma once
 
-#include <cstdint>
-#include <memory>
+#include <stdint.h>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include "model.h"
 
@@ -28,7 +30,7 @@ namespace strutext { namespace morpho {
 /// Russian morpho model base abstract class definition.
 struct RussianPos : public PartOfSpeech {
   /// Type of smart pointer to the class object.
-  typedef std::shared_ptr<RussianPos> Ptr;
+  typedef boost::shared_ptr<RussianPos> Ptr;
 
   /// Possible parts of speech.
   enum PosTag {
@@ -919,55 +921,55 @@ struct PosSerializer {
     RussianPos::Ptr pos;
     switch (pos_tag) {
       case RussianPos::NOUN_PS:
-        pos = std::make_shared<Noun>();
+        pos = boost::make_shared<Noun>();
         break;
       case RussianPos::ADJECTIVE_PS:
-        pos = std::make_shared<Adjective>();
+        pos = boost::make_shared<Adjective>();
         break;
       case RussianPos::PRONOUN_NOUN_PS:
-        pos = std::make_shared<PronounNoun>();
+        pos = boost::make_shared<PronounNoun>();
         break;
       case RussianPos::VERB_PS:
-        pos = std::make_shared<Verb>();
+        pos = boost::make_shared<Verb>();
         break;
       case RussianPos::ADVERB_PARTICIPLE_PS:
-        pos = std::make_shared<AdverbParticiple>();
+        pos = boost::make_shared<AdverbParticiple>();
         break;
       case RussianPos::PARTICIPLE_PS:
-        pos = std::make_shared<Participle>();
+        pos = boost::make_shared<Participle>();
         break;
       case RussianPos::PRONOUN_PREDICATIVE_PS:
-        pos = std::make_shared<PronounPredicative>();
+        pos = boost::make_shared<PronounPredicative>();
         break;
       case RussianPos::PRONOUN_ADJECTIVE_PS:
-        pos = std::make_shared<PronounAdjective>();
+        pos = boost::make_shared<PronounAdjective>();
         break;
       case RussianPos::NUMERAL_QUANTITATIVE_PS:
-        pos = std::make_shared<NumeralQuantitative>();
+        pos = boost::make_shared<NumeralQuantitative>();
         break;
       case RussianPos::NUMERAL_ORDINAL_PS:
-        pos = std::make_shared<NumeralOrdinal>();
+        pos = boost::make_shared<NumeralOrdinal>();
         break;
       case RussianPos::ADVERB_PS:
-        pos = std::make_shared<Adverb>();
+        pos = boost::make_shared<Adverb>();
         break;
       case RussianPos::PREDICATE_PS:
-        pos = std::make_shared<Predicate>();
+        pos = boost::make_shared<Predicate>();
         break;
       case RussianPos::PREPOSITION_PS:
-        pos = std::make_shared<Preposition>();
+        pos = boost::make_shared<Preposition>();
         break;
       case RussianPos::CONJUCTION_PS:
-        pos = std::make_shared<Conjuction>();
+        pos = boost::make_shared<Conjuction>();
         break;
       case RussianPos::INTERJECTION_PS:
-        pos = std::make_shared<Interjection>();
+        pos = boost::make_shared<Interjection>();
         break;
       case RussianPos::PARTICLE_PS:
-        pos = std::make_shared<Particle>();
+        pos = boost::make_shared<Particle>();
         break;
       case RussianPos::INTRODUCTORY_WORD_PS:
-        pos = std::make_shared<IntroductionaryWord>();
+        pos = boost::make_shared<IntroductionaryWord>();
         break;
 
       default:

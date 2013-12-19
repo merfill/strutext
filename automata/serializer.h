@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -60,15 +61,15 @@ public:
     }
 
     // Go through the moves.
-    for (auto move : moves.trans_table_) {
+    for (typename Transitions::TransTable::const_iterator move_it = moves.trans_table_.begin(); move_it != moves.trans_table_.end(); ++move_it) {
       // Write symbol.
-      os.write((const char*)&(move.first), sizeof(typename Transitions::CharType));
+      os.write((const char*)&(move_it->first), sizeof(typename Transitions::CharType));
       if (os.bad()) {
         throw std::runtime_error("Cannot write symbol to stream");
       }
 
       // Write state.
-      os.write((const char*)&(move.second), sizeof(StateId));
+      os.write((const char*)&(move_it->second), sizeof(StateId));
       if (os.bad()) {
         throw std::runtime_error("Cannot write state to stream");
       }
@@ -106,7 +107,7 @@ public:
 
 /// Flat transition table serializer.
 template <typename Char, size_t Size>
-  class TransSerializer<FlatTransitions<Char, Size>> {
+  class TransSerializer<FlatTransitions<Char, Size> > {
 public:
   /// Move table type.
   typedef FlatTransitions<Char, Size> Transitions;

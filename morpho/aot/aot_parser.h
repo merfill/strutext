@@ -18,18 +18,20 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <string>
 #include <memory>
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace strutext { namespace morpho {
 
-class AotParser : private boost::noncopyable {
+class AotParser : boost::noncopyable {
 public:
   /// Smart pointer type definition.
-  typedef std::shared_ptr<AotParser> Ptr;
+  typedef boost::shared_ptr<AotParser> Ptr;
 
   /// Check is passed string main form code.
   virtual uint32_t ParseAttrLine(const std::string& line, std::string& id) const = 0;

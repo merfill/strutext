@@ -18,13 +18,15 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <string>
 #include <map>
 #include <iostream>
 #include <memory>
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace strutext { namespace morpho {
 
@@ -32,13 +34,13 @@ namespace strutext { namespace morpho {
 class MorphoModifier;
 
 /// Simple storage for word bases.
-class BaseStorage : public boost::noncopyable {
+class BaseStorage : boost::noncopyable {
   // Using boost::serialization.
   friend class boost::serialization::access;
 
 public:
   /// Class object pointer type.
-  typedef std::shared_ptr<BaseStorage> Ptr;
+  typedef boost::shared_ptr<BaseStorage> Ptr;
 
 private:
   /// Lemma info.

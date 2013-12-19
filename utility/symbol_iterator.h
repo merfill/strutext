@@ -55,7 +55,4 @@ symbols::SymbolCode LowerAndSpace(symbols::SymbolCode symbol) {
 
 typedef symbols::SymbolCode (*SymTransform)(symbols::SymbolCode);
 
-/// Symbol stream iterator droping nonalphas and lowering symbols.
-template <class Iterator> using SymbolAlphaIterator = FilterIterator<symbols::SymbolCode, Iterator, AlphaFilter, SymTransform>;
-
 }} // namespace strutext, utility.

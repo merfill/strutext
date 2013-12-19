@@ -72,9 +72,9 @@ public:
 
     // Set fail move to the start state.
     const TransTableImpl& st_moves = ac_trie.GetMoveTable(kStartState);
-    for (auto move : st_moves) {
-      ac_trie.fail_moves_[move.second] = kStartState;
-      work_states.push_front(move.second); // Don't forget to add move to the queue.
+    for (typename TransTableImpl::const_iterator move_it = st_moves.begin(); move_it != st_moves.end(); ++move_it) {
+      ac_trie.fail_moves_[move_it->second] = kStartState;
+      work_states.push_front(move_it->second); // Don't forget to add move to the queue.
     }
 
     // Do while work states set is not empty.
@@ -85,15 +85,15 @@ public:
 
       // Go throgh the state's moves.
       const TransTableImpl& st_moves = ac_trie.GetMoveTable(state);
-      for (auto move : st_moves) {
+      for (typename TransTableImpl::const_iterator move_it = st_moves.begin(); move_it != st_moves.end(); ++move_it) {
         // Add moving state to work states set.
-        work_states.push_front(move.second);
+        work_states.push_front(move_it->second);
 
         // Down through fail moves while go to the start state or there is move by the symbol.
         StateId fstate = ac_trie.fail_moves_[state];
         while (fstate != kStartState) {
           // Do move.
-          StateId st = ac_trie.Go(fstate, move.first);
+          StateId st = ac_trie.Go(fstate, move_it->first);
 
           // If there is fail move from the state than "continue" it.
           if (st != kInvalidState) {
@@ -103,11 +103,11 @@ public:
         }
 
         // Add faile move to non start state only if there is move by the current symbol.
-        StateId st = ac_trie.Go(fstate, move.first);
+        StateId st = ac_trie.Go(fstate, move_it->first);
         if (st != kInvalidState) {
-          ac_trie.fail_moves_[move.second] = st;
+          ac_trie.fail_moves_[move_it->second] = st;
         } else {
-          ac_trie.fail_moves_[move.second] = kStartState;
+          ac_trie.fail_moves_[move_it->second] = kStartState;
         }
       }
     }
@@ -121,11 +121,11 @@ public:
         if (ac_trie.IsAcceptable(fstate)) {
           const typename AcTrie::AttributeList& chain_ids = ac_trie.GetStateAttributes(fstate);
           // Go through identifiers.
-          for (auto chain_id : chain_ids) {
+          for (typename AcTrie::AttributeList::const_iterator chain_it = chain_ids.begin(); chain_it != chain_ids.end(); ++chain_it) {
             // Search the identifier in the attribute list and add if the identifier hasn't been found.
             const typename AcTrie::AttributeList& ids = ac_trie.GetStateAttributes(state);
-            if (std::find(ids.begin(), ids.end(), chain_id) == ids.end()) {
-              ac_trie.AddAttribute(state, chain_id);
+            if (std::find(ids.begin(), ids.end(), *chain_it) == ids.end()) {
+              ac_trie.AddAttribute(state, *chain_it);
             }
           }
         }

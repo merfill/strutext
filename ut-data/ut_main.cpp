@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <regex>
 
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
@@ -40,7 +39,7 @@ boost::unit_test::test_suite* init_unit_test_suite(int argc, char* argv[]) {
   if (not std::string(UNIT_TEST_MODULE_NAME).empty()) {
     boost::unit_test::framework::master_test_suite().p_name.value = UNIT_TEST_MODULE_NAME;
   }
-  return nullptr;
+  return NULL;
 }
 
 // Инициализация логера.

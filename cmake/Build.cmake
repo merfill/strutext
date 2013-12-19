@@ -32,7 +32,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${STRUTEXT_ROOT_BINARY_DIR}/${CMAKE_BUILD_TYP
 
 # General Flags for GCC.
 if (${CMAKE_COMPILER_IS_GNUCXX})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fPIC -Wall -Wno-error -D__STDC_LIMIT_MACROS=1 -I.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wno-error -D__STDC_LIMIT_MACROS=1 -I.")
 endif (${CMAKE_COMPILER_IS_GNUCXX})
 
 # Definitions for build types.

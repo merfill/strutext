@@ -16,7 +16,8 @@
  * \author Vladimir Lapshin.
  */
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <string>
 #include <sstream>
 

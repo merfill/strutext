@@ -18,13 +18,15 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <memory>
 #include <list>
 #include <utility>
 #include <iterator>
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "utf8_iterator.h"
 #include "utf8_generator.h"
@@ -46,7 +48,7 @@ class MorphoModifier;
 /// Base morphologist class.
 struct MorphologistBase : private boost::noncopyable {
   /// Smart pointer type.
-  typedef std::shared_ptr<MorphologistBase> Ptr;
+  typedef boost::shared_ptr<MorphologistBase> Ptr;
 
   /// Lemma type definion.
   struct Lemma {
@@ -197,11 +199,11 @@ public:
     // The second phase. Go throuth the found base list and find suffixes for them.
     // If suffixes have been found then add them to the lemma list.
     lem_list.clear();
-    for (auto base : base_list) {
+    for (BaseList::iterator base_it = base_list.begin(); base_it != base_list.end(); ++base_it) {
       AttrMap attr;
-      attr.auto_attr_ = base.first;
+      attr.auto_attr_ = base_it->first;
       SuffixStorage::AttrList att_list;
-      std::string suffix = code_str.substr(base.second);
+      std::string suffix = code_str.substr(base_it->second);
       // If suffix is empty (empty suffix passed), add zero symbol to it.
       if (suffix.empty()) {
         suffix.push_back('\0');

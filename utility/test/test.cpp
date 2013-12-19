@@ -18,7 +18,8 @@
  * \date   23.11.2013
  */
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <string>
 #include <vector>
 
@@ -58,7 +59,7 @@ BOOST_AUTO_TEST_CASE(Utility_NgrammIterator_Symbols) {
 }
 
 BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_EnglishGeneral) {
-  typedef SymbolAlphaIterator<std::string::const_iterator> IteratorImpl;
+  typedef FilterIterator<symbols::SymbolCode, std::string::const_iterator, AlphaFilter, SymTransform> IteratorImpl;
   std::string text = "   !:,213213Hello,]]][[[[    World  !   ";
   AlphaFilter filter;
   std::string result;
@@ -70,7 +71,7 @@ BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_EnglishGeneral) {
 
 BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_RussianGeneral) {
   typedef encode::Utf8Iterator<std::string::const_iterator> Utf8IteratorImpl;
-  typedef SymbolAlphaIterator<Utf8IteratorImpl> IteratorImpl;
+  typedef FilterIterator<symbols::SymbolCode, Utf8IteratorImpl, AlphaFilter, SymTransform> IteratorImpl;
   std::string text = "    12321321  ,,, \\///!!! Здравствуй, [[[ Мир  ]]]  !!!!";
   AlphaFilter filter;
   std::string result;

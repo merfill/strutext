@@ -16,7 +16,8 @@
  * \author Vladimir Lapshin.
  */
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -28,6 +29,7 @@
 #include <iterator>
 
 #include <boost/program_options.hpp>
+#include <boost/make_shared.hpp>
 
 #include "utf8_iterator.h"
 #include "utf8_generator.h"
@@ -332,9 +334,9 @@ int main(int argc, char* argv[]) {
 
     strutext::morpho::AotParser::Ptr parser;
     if (model == "rus") {
-      parser = std::make_shared<strutext::morpho::RussianAotParser>();
+      parser = boost::make_shared<strutext::morpho::RussianAotParser>();
     } else if (model == "eng") {
-      parser = std::make_shared<strutext::morpho::EnglishAotParser>();
+      parser = boost::make_shared<strutext::morpho::EnglishAotParser>();
     } else {
       std::cerr << "incorrect language model name: \"" << model << "\"\n";
       return 1;

@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <vector>
 #include <stdexcept>
 
@@ -32,7 +33,7 @@ class NgramIterator : public boost::iterator_facade<
   NgramIterator<Element, Iterator>
   , std::vector<Element>
   , boost::forward_traversal_tag
-  , std::vector<Element>> {
+  , std::vector<Element> > {
   /// Type of buffer for ngrams.
   typedef boost::circular_buffer<Element> Buffer;
 

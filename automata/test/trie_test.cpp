@@ -16,7 +16,8 @@
  * \author Vladimir Lapshin.
  */
 
-#include <cstdint>
+#include <stdint.h>
+
 #include <sstream>
 #include <string>
 
@@ -38,7 +39,7 @@ struct TrieUtils {
   // Search chain in the passed trie.
   static bool CheckCnainInTrie(const std::string& chain, FlexTrie::Attribute attr, const FlexTrie& trie) {
     strutext::automata::StateId state = strutext::automata::kStartState;
-    for (auto it = chain.begin(); it != chain.end(); ++it) {
+    for (std::string::const_iterator it = chain.begin(); it != chain.end(); ++it) {
       state = trie.Go(state, *it);
       if (state == strutext::automata::kInvalidState) {
         return false;
@@ -52,8 +53,8 @@ struct TrieUtils {
 
     // Check is there the passed value in the attribute list.
     const FlexTrie::AttributeList& attrs = trie.GetStateAttributes(state);
-    for (auto attribute : attrs) {
-      if (attribute == attr) {
+    for (FlexTrie::AttributeList::const_iterator attribute_it = attrs.begin(); attribute_it != attrs.end(); ++attribute_it) {
+      if (*attribute_it == attr) {
         return true;
       }
     }

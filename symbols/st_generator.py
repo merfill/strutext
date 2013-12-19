@@ -50,36 +50,36 @@ def generateTableEpilog(f, t, n):
     f.write("}}; // {0} {1}\n\n".format(t,n))
 
 def generateClassMapping(m):
-  m["Lu"] = "SymbolClass::UPPERCASE_LETTER"
-  m["Ll"] = "SymbolClass::LOWERCASE_LETTER"
-  m["Lt"] = "SymbolClass::TITLECASE_LETTER"
-  m["Lm"] = "SymbolClass::MODIFIER_LETTER"
-  m["Lo"] = "SymbolClass::OTHER_LETTER"
-  m["Mn"] = "SymbolClass::NONSPACING_MARK"
-  m["Mc"] = "SymbolClass::SPACING_MARK"
-  m["Me"] = "SymbolClass::ENCLOSING_MARK"
-  m["Nd"] = "SymbolClass::DECIMAL_NUMBER"
-  m["Nl"] = "SymbolClass::LETTER_NUMBER"
-  m["No"] = "SymbolClass::OTHER_NUMBER"
-  m["Pc"] = "SymbolClass::CONNECTOR_PUNCTUATION"
-  m["Pd"] = "SymbolClass::DASH_PUNCTUATION"
-  m["Ps"] = "SymbolClass::OPEN_PUNCTUATION"
-  m["Pe"] = "SymbolClass::CLOSE_PUNCTUATION"
-  m["Pi"] = "SymbolClass::INITIAL_PUNCTUATION"
-  m["Pf"] = "SymbolClass::FINAL_PUNCTUATION"
-  m["Po"] = "SymbolClass::OTHER_PUNCTUATION"
-  m["Sm"] = "SymbolClass::MATH_SYMBOL"
-  m["Sc"] = "SymbolClass::CURRENCY_SYMBOL"
-  m["Sk"] = "SymbolClass::MODIFIER_SYMBOL"
-  m["So"] = "SymbolClass::OTHER_SYMBOL"
-  m["Zs"] = "SymbolClass::SPACE_SEPARATOR"
-  m["Zl"] = "SymbolClass::LINE_SEPARATOR"
-  m["Zp"] = "SymbolClass::PARAGRAPH_SEPARATOR"
-  m["Cc"] = "SymbolClass::CONTROL"
-  m["Cf"] = "SymbolClass::FORMAT"
-  m["Cs"] = "SymbolClass::SURROGATE"
-  m["Co"] = "SymbolClass::PRIVATE_USE"
-  m["Cn"] = "SymbolClass::UNASSIGNED"
+  m["Lu"] = "UPPERCASE_LETTER"
+  m["Ll"] = "LOWERCASE_LETTER"
+  m["Lt"] = "TITLECASE_LETTER"
+  m["Lm"] = "MODIFIER_LETTER"
+  m["Lo"] = "OTHER_LETTER"
+  m["Mn"] = "NONSPACING_MARK"
+  m["Mc"] = "SPACING_MARK"
+  m["Me"] = "ENCLOSING_MARK"
+  m["Nd"] = "DECIMAL_NUMBER"
+  m["Nl"] = "LETTER_NUMBER"
+  m["No"] = "OTHER_NUMBER"
+  m["Pc"] = "CONNECTOR_PUNCTUATION"
+  m["Pd"] = "DASH_PUNCTUATION"
+  m["Ps"] = "OPEN_PUNCTUATION"
+  m["Pe"] = "CLOSE_PUNCTUATION"
+  m["Pi"] = "INITIAL_PUNCTUATION"
+  m["Pf"] = "FINAL_PUNCTUATION"
+  m["Po"] = "OTHER_PUNCTUATION"
+  m["Sm"] = "MATH_SYMBOL"
+  m["Sc"] = "CURRENCY_SYMBOL"
+  m["Sk"] = "MODIFIER_SYMBOL"
+  m["So"] = "OTHER_SYMBOL"
+  m["Zs"] = "SPACE_SEPARATOR"
+  m["Zl"] = "LINE_SEPARATOR"
+  m["Zp"] = "PARAGRAPH_SEPARATOR"
+  m["Cc"] = "CONTROL"
+  m["Cf"] = "FORMAT"
+  m["Cs"] = "SURROGATE"
+  m["Co"] = "PRIVATE_USE"
+  m["Cn"] = "UNASSIGNED"
 
 def generate(textTablePath, binTablePath):
   symbols = {}
@@ -121,7 +121,7 @@ def generate(textTablePath, binTablePath):
             print "Incorrect symbol class {0} for symbol {1}".format(symbol[2], symbol[0])
             sys.exit(5)
       else:
-        f.write("static_cast<uint32_t>(SymbolClass::UNASSIGNED)\n")
+        f.write("static_cast<uint32_t>(UNASSIGNED)\n")
     generateTableEpilog(f, "uint32_t", "SYM_CLASS_TABLE")
 
     # Generate symbol upper counterparts from 0 to 2^21 - 1.

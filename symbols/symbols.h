@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace strutext { namespace symbols {
 
@@ -42,7 +42,7 @@ typedef uint32_t SymbolCode;
  * extra information, which depends on the symbol class. For instance, for
  * Letter symbol class the type contains code of lower and upper letter variant.
  */
-enum class SymbolClass : uint32_t {
+enum SymbolClass {
   UPPERCASE_LETTER      = 0x00000001,
   LOWERCASE_LETTER      = 0x00000002,
   TITLECASE_LETTER      = 0x00000004,
@@ -114,35 +114,35 @@ inline bool Is(const SymbolCode& code)  {
 }
 
 inline bool IsCasedLetter(const SymbolCode& code) {
-  return Is<SymbolClass::CASED_LETTER>(code);
+  return Is<CASED_LETTER>(code);
 }
 
 inline bool IsLetter(const SymbolCode& code) {
-  return Is<SymbolClass::LETTER>(code);
+  return Is<LETTER>(code);
 }
 
 inline bool IsMark(const SymbolCode& code) {
-  return Is<SymbolClass::MARK>(code);
+  return Is<MARK>(code);
 }
 
 inline bool IsNumber(const SymbolCode& code) {
-  return Is<SymbolClass::NUMBER>(code);
+  return Is<NUMBER>(code);
 }
 
 inline bool IsPunctuation(const SymbolCode& code) {
-  return Is<SymbolClass::PUNCTUATION>(code);
+  return Is<PUNCTUATION>(code);
 }
 
 inline bool IsSymbol(const SymbolCode& code) {
-  return Is<SymbolClass::SYMBOL>(code);
+  return Is<SYMBOL>(code);
 }
 
 inline bool IsSeparator(const SymbolCode& code) {
-  return Is<SymbolClass::SEPARATOR>(code);
+  return Is<SEPARATOR>(code);
 }
 
 inline bool IsOther(const SymbolCode& code) {
-  return Is<SymbolClass::OTHER>(code);
+  return Is<OTHER>(code);
 }
 
 // Some fundamental UNICODE constants.

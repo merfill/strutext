@@ -18,8 +18,10 @@
 
 #pragma once
 
-#include <cstdint>
-#include <memory>
+#include <stdint.h>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include "model.h"
 
@@ -28,7 +30,7 @@ namespace strutext { namespace morpho {
 /// English morpho model base abstract class definition.
 struct EnglishPos : public PartOfSpeech {
   /// Type of smart pointer to the class object.
-  typedef std::shared_ptr<EnglishPos> Ptr;
+  typedef boost::shared_ptr<EnglishPos> Ptr;
 
   /// Possible parts of speech.
   enum PosTag {
@@ -566,49 +568,49 @@ struct PosSerializer {
     EnglishPos::Ptr pos;
     switch (pos_tag) {
       case EnglishPos::NOUN_PS:
-        pos = std::make_shared<Noun>();
+        pos = boost::make_shared<Noun>();
         break;
       case EnglishPos::ADJECTIVE_PS:
-        pos = std::make_shared<Adjective>();
+        pos = boost::make_shared<Adjective>();
         break;
       case EnglishPos::PRONOUN_PS:
-        pos = std::make_shared<Pronoun>();
+        pos = boost::make_shared<Pronoun>();
         break;
       case EnglishPos::PRONOUN_NOUN_PS:
-        pos = std::make_shared<PronounNoun>();
+        pos = boost::make_shared<PronounNoun>();
         break;
       case EnglishPos::VERB_PS:
-        pos = std::make_shared<Verb>();
+        pos = boost::make_shared<Verb>();
         break;
       case EnglishPos::PRONOUN_ADJECTIVE_PS:
-        pos = std::make_shared<PronounAdjective>();
+        pos = boost::make_shared<PronounAdjective>();
         break;
       case EnglishPos::NUMERAL_PS:
-        pos = std::make_shared<Numeral>();
+        pos = boost::make_shared<Numeral>();
         break;
       case EnglishPos::NUMERAL_ORDINAL_PS:
-        pos = std::make_shared<NumeralOrdinal>();
+        pos = boost::make_shared<NumeralOrdinal>();
         break;
       case EnglishPos::ADVERB_PS:
-        pos = std::make_shared<Adverb>();
+        pos = boost::make_shared<Adverb>();
         break;
       case EnglishPos::PREPOSITION_PS:
-        pos = std::make_shared<Preposition>();
+        pos = boost::make_shared<Preposition>();
         break;
       case EnglishPos::CONJUCTION_PS:
-        pos = std::make_shared<Conjuction>();
+        pos = boost::make_shared<Conjuction>();
         break;
       case EnglishPos::INTERJECTION_PS:
-        pos = std::make_shared<Interjection>();
+        pos = boost::make_shared<Interjection>();
         break;
       case EnglishPos::PARTICLE_PS:
-        pos = std::make_shared<Particle>();
+        pos = boost::make_shared<Particle>();
         break;
       case EnglishPos::ARTICLE_PS:
-        pos = std::make_shared<Article>();
+        pos = boost::make_shared<Article>();
         break;
       case EnglishPos::POSSESSIVE_PS:
-        pos = std::make_shared<Possessive>();
+        pos = boost::make_shared<Possessive>();
         break;
       default:
         assert(false and "incorrect pos value");

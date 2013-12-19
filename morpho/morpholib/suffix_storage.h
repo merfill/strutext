@@ -18,8 +18,9 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
+#include <stdint.h>
+#include <stddef.h>
+
 #include <string>
 #include <vector>
 #include <map>
@@ -29,6 +30,7 @@
 #include <memory>
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/serialization/access.hpp>
 
 namespace strutext { namespace morpho {
@@ -44,13 +46,13 @@ class MorphoModifier;
  * a list of 32bit attributes. To find attribute list one must pass line id and suffix
  * value to the seach procedure.
  */
-class SuffixStorage : public boost::noncopyable {
+class SuffixStorage : boost::noncopyable {
   // Using boost::serialization.
   friend class boost::serialization::access;
 
 public:
   /// Class object pointer type.
-  typedef std::shared_ptr<SuffixStorage> Ptr;
+  typedef boost::shared_ptr<SuffixStorage> Ptr;
 
   /// Type of attribute array.
   typedef std::vector<uint32_t> AttrList;
@@ -88,7 +90,7 @@ public:
     } else {
       throw std::invalid_argument("incorrect line id passed");
     }
-    return nullptr;
+    return NULL;
   }
 
   /**
@@ -107,7 +109,7 @@ public:
     } else {
       throw std::invalid_argument("incorrect line id passed");
     }
-    return nullptr;
+    return NULL;
   }
 
   /**

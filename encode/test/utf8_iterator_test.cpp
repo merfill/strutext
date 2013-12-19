@@ -30,7 +30,7 @@ typedef strutext::encode::Utf8Iterator<std::string::const_iterator> Utf8Iterator
 
 std::string Utf8ToUtf8(const std::string& text) {
   std::string result;
-  for (auto it = Utf8Iterator(text.begin(), text.end()); it != Utf8Iterator(); ++it) {
+  for (Utf8Iterator it = Utf8Iterator(text.begin(), text.end()); it != Utf8Iterator(); ++it) {
     strutext::encode::GetUtf8Sequence(*it, std::back_inserter(result));
   }
   return result;

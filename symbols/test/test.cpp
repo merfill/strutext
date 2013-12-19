@@ -19,6 +19,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <boost/foreach.hpp>
 
 #include "symbols.h"
 
@@ -30,9 +31,9 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolClass_EnglishLetters) {
     'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h',
     'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm'
   };
-  for (sym::SymbolCode c : letters) {
+  BOOST_FOREACH(sym::SymbolCode c, letters) {
     BOOST_CHECK(sym::IsLetter(c));
-    BOOST_CHECK(sym::Is<sym::SymbolClass::LETTER>(c));
+    BOOST_CHECK(sym::Is<sym::LETTER>(c));
   }
 }
 
@@ -43,18 +44,18 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolClass_RussianLetters) {
     0x43c, 0x43d, 0x43e, 0x43f, 0x440, 0x441, 0x442, 0x443, 0x444, 0x445, 0x446, 0x447,
     0x448, 0x449, 0x44a, 0x44b, 0x44c, 0x44d, 0x44e, 0x44f, 0x451
   };
-  for (sym::SymbolCode c : letters) {
+  BOOST_FOREACH(sym::SymbolCode c, letters) {
     BOOST_CHECK(sym::IsLetter(c));
-    BOOST_CHECK(sym::Is<sym::SymbolClass::LETTER>(c));
+    BOOST_CHECK(sym::Is<sym::LETTER>(c));
   }
 }
 
 BOOST_AUTO_TEST_CASE(Symbols_SymbolClass_Digits) {
   // 01234567890
   const sym::SymbolCode digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
-  for (sym::SymbolCode c : digits) {
+  BOOST_FOREACH(sym::SymbolCode c, digits) {
     BOOST_CHECK(sym::IsNumber(c));
-    BOOST_CHECK(sym::Is<sym::SymbolClass::NUMBER>(c));
+    BOOST_CHECK(sym::Is<sym::NUMBER>(c));
   }
 }
 
@@ -63,9 +64,9 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolClass_Punctuators) {
   const sym::SymbolCode punctuators[] = {
     '.', ':', ';', ',', '!', '?', '#', '%', '-', '\'', '"', '@', '(', ')', '[', ']', '*', '/', '\\', '&'
   };
-  for (sym::SymbolCode c : punctuators) {
+  BOOST_FOREACH(sym::SymbolCode c, punctuators) {
     BOOST_CHECK(sym::IsPunctuation(c));
-    BOOST_CHECK(sym::Is<sym::SymbolClass::PUNCTUATION>(c));
+    BOOST_CHECK(sym::Is<sym::PUNCTUATION>(c));
   }
 }
 
@@ -81,7 +82,7 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolCases_EnglishToUpper) {
     'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'
   };
   size_t current = 0;
-  for (sym::SymbolCode c : lowers) {
+  BOOST_FOREACH(sym::SymbolCode c, lowers) {
     BOOST_CHECK(sym::IsCasedLetter(c));
     BOOST_CHECK(sym::ToUpper(c) == uppers[current]);
     ++current;
@@ -100,7 +101,7 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolCases_EnglishToLower) {
     'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'
   };
   size_t current = 0;
-  for (sym::SymbolCode c : lowers) {
+  BOOST_FOREACH(sym::SymbolCode c, lowers) {
     BOOST_CHECK(sym::IsCasedLetter(c));
     BOOST_CHECK(sym::ToUpper(c) == uppers[current]);
     ++current;
@@ -121,7 +122,7 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolCases_RussianToUpper) {
     0x428, 0x429, 0x42a, 0x42b, 0x42c, 0x42d, 0x42e, 0x42f, 0x401
   };
   size_t current = 0;
-  for (sym::SymbolCode c : lowers) {
+  BOOST_FOREACH(sym::SymbolCode c, lowers) {
     BOOST_CHECK(sym::IsCasedLetter(c));
     BOOST_CHECK(sym::ToUpper(c) == uppers[current]);
     ++current;
@@ -142,7 +143,7 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolCases_RussianToLower) {
     0x428, 0x429, 0x42a, 0x42b, 0x42c, 0x42d, 0x42e, 0x42f, 0x401
   };
   size_t current = 0;
-  for (sym::SymbolCode c : uppers) {
+  BOOST_FOREACH(sym::SymbolCode c, uppers) {
     BOOST_CHECK(sym::IsCasedLetter(c));
     BOOST_CHECK(sym::ToLower(c) == lowers[current]);
     ++current;

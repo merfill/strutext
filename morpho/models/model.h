@@ -18,9 +18,8 @@
 
 #pragma once
 
-#include <memory>
-
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace strutext { namespace morpho {
 
@@ -28,7 +27,7 @@ namespace strutext { namespace morpho {
 class PartOfSpeech : private boost::noncopyable {
 public:
   /// Type of smart pointer to the class object.
-  typedef std::shared_ptr<PartOfSpeech> Ptr;
+  typedef boost::shared_ptr<PartOfSpeech> Ptr;
 
   /// Language tag definitions.
   enum LanguageTag {

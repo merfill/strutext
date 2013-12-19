@@ -16,9 +16,8 @@
  * \author Vladimir Lapshin.
  */
 
-#include <memory>
-
 #include <boost/test/unit_test.hpp>
+#include <boost/make_shared.hpp>
 
 #include "rus_model.h"
 namespace m = strutext::morpho;
@@ -26,7 +25,7 @@ namespace rm = strutext::morpho::russian;
 
 // Noun test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Noun) {
-  m::RussianPos::Ptr noun_ptr = std::make_shared<rm::Noun>();
+  m::RussianPos::Ptr noun_ptr = boost::make_shared<rm::Noun>();
   rm::Noun* noun = static_cast<rm::Noun*>(noun_ptr.get());
   noun->number_   = m::RussianPos::PLURAL_NUMBER;
   noun->lang_     = m::RussianPos::ARCHAIZM_LANG;
@@ -49,7 +48,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Noun) {
 
 // Adjective test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Adjective) {
-  m::RussianPos::Ptr adj_ptr = std::make_shared<rm::Adjective>();
+  m::RussianPos::Ptr adj_ptr = boost::make_shared<rm::Adjective>();
   rm::Adjective* adj = static_cast<rm::Adjective*>(adj_ptr.get());
   adj->number_    = m::RussianPos::PLURAL_NUMBER;
   adj->lang_      = m::RussianPos::NORMAL_LANG;
@@ -74,7 +73,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Adjective) {
 
 // PronounNoun test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounNoun) {
-  m::RussianPos::Ptr pn_ptr = std::make_shared<rm::PronounNoun>();
+  m::RussianPos::Ptr pn_ptr = boost::make_shared<rm::PronounNoun>();
   rm::PronounNoun* pn = static_cast<rm::PronounNoun*>(pn_ptr.get());
   pn->number_  = m::RussianPos::PLURAL_NUMBER;
   pn->lang_    = m::RussianPos::SLANG_LANG;
@@ -97,7 +96,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounNoun) {
 
 // Verb test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Verb) {
-  m::RussianPos::Ptr verb_ptr = std::make_shared<rm::Verb>();
+  m::RussianPos::Ptr verb_ptr = boost::make_shared<rm::Verb>();
   rm::Verb* verb = static_cast<rm::Verb*>(verb_ptr.get());
   verb->number_     = m::RussianPos::PLURAL_NUMBER;
   verb->lang_       = m::RussianPos::INFORMAL_LANG;
@@ -122,7 +121,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Verb) {
 
 // Participle test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Participle) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::Participle>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::Participle>();
   rm::Participle* pt = static_cast<rm::Participle*>(pt_ptr.get());
   pt->number_     = m::RussianPos::SINGULAR_NUMBER;
   pt->lang_       = m::RussianPos::NORMAL_LANG;
@@ -149,7 +148,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Participle) {
 
 // AdverbParticiple test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_AdverbParticiple) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::AdverbParticiple>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::AdverbParticiple>();
   rm::AdverbParticiple* pt = static_cast<rm::AdverbParticiple*>(pt_ptr.get());
   pt->lang_       = m::RussianPos::NORMAL_LANG;
   pt->time_       = m::RussianPos::FUTURE_TIME;
@@ -168,7 +167,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_AdverbParticiple) {
 
 // PronounPredicative test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounPredicative) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::PronounPredicative>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::PronounPredicative>();
   rm::PronounPredicative* pt = static_cast<rm::PronounPredicative*>(pt_ptr.get());
   pt->number_    = m::RussianPos::PLURAL_NUMBER;
   pt->lang_      = m::RussianPos::NORMAL_LANG;
@@ -187,7 +186,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounPredicative) {
 
 // PronounAdjective test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounAdjective) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::PronounAdjective>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::PronounAdjective>();
   rm::PronounAdjective* pt = static_cast<rm::PronounAdjective*>(pt_ptr.get());
   pt->number_     = m::RussianPos::SINGULAR_NUMBER;
   pt->lang_       = m::RussianPos::INFORMAL_LANG;
@@ -210,7 +209,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_PronounAdjective) {
 
 // NumeralQuantitative test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_NumeralQuantitative) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::NumeralQuantitative>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::NumeralQuantitative>();
   rm::NumeralQuantitative* pt = static_cast<rm::NumeralQuantitative*>(pt_ptr.get());
   pt->lang_       = m::RussianPos::INFORMAL_LANG;
   pt->gender_     = m::RussianPos::MASCULINE_GENDER;
@@ -229,7 +228,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_NumeralQuantitative) {
 
 // NumeralOrdinal test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_NumeralOrdinal) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::NumeralOrdinal>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::NumeralOrdinal>();
   rm::NumeralOrdinal* pt = static_cast<rm::NumeralOrdinal*>(pt_ptr.get());
   pt->number_     = m::RussianPos::SINGULAR_NUMBER;
   pt->lang_       = m::RussianPos::INFORMAL_LANG;
@@ -252,7 +251,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_NumeralOrdinal) {
 
 // Adverb test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Adverb) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::Adverb>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::Adverb>();
   rm::Adverb* pt = static_cast<rm::Adverb*>(pt_ptr.get());
   pt->lang_           = m::RussianPos::INFORMAL_LANG;
   pt->relativity_     = true;
@@ -273,7 +272,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Adverb) {
 
 // Predicate test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Predicate) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::Predicate>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::Predicate>();
   rm::Predicate* pt = static_cast<rm::Predicate*>(pt_ptr.get());
   pt->lang_       = m::RussianPos::INFORMAL_LANG;
   pt->time_       = m::RussianPos::FUTURE_TIME;
@@ -292,7 +291,7 @@ BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Predicate) {
 
 // Preposition test.
 BOOST_AUTO_TEST_CASE(Morpho_RussianModel_Preposition) {
-  m::RussianPos::Ptr pt_ptr = std::make_shared<rm::Preposition>();
+  m::RussianPos::Ptr pt_ptr = boost::make_shared<rm::Preposition>();
   rm::Preposition* pt = static_cast<rm::Preposition*>(pt_ptr.get());
   pt->lang_       = m::RussianPos::NORMAL_LANG;
 
