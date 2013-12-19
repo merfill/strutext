@@ -58,7 +58,7 @@ public:
     , it_(begin)
     , end_(end) {
     // Check parameters correctness.
-    if (min_len >= max_len) {
+    if (min_len > max_len) {
       throw std::invalid_argument("Minimum ngram length is more than maximum one");
     } else if (min_len == 0) {
       throw std::invalid_argument("Minimum ngram length must not be zero");
