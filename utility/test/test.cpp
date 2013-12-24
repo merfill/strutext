@@ -29,6 +29,7 @@
 #include "utf8_generator.h"
 #include "ngram_iterator.h"
 #include "symbol_iterator.h"
+#include "word_iterator.h"
 
 namespace strutext { namespace utility {
 
@@ -80,6 +81,35 @@ BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_RussianGeneral) {
     encode::GetUtf8Sequence(*it, std::back_inserter(result));
   }
   BOOST_CHECK(result == " здравствуй мир ");
+}
+
+BOOST_AUTO_TEST_CASE(Utility_WordIterator_EnglishRussianWords) {
+  typedef encode::Utf8Iterator<std::string::const_iterator> Utf8IteratorImpl;
+  typedef WordIterator<symbols::SymbolCode, Utf8IteratorImpl> WordIteratorImpl;
+  std::string text = "    12321321  ,,, \\///!!! Здравствуй, hello [[[ Мир  ]]]  !!!! World!";
+  Utf8IteratorImpl utf8_begin(text.begin(), text.end()), utf8_end;
+  size_t counter = 1;
+  for (WordIteratorImpl it(utf8_begin, utf8_end), end; it != end; ++it, ++counter) {
+    std::string result;
+    encode::GetUtf8Sequence((*it).begin(), (*it).end(), std::back_inserter(result));
+    switch (counter) {
+      case 1:
+        BOOST_CHECK(result == "Здравствуй");
+        break;
+      case 2:
+        BOOST_CHECK(result == "hello");
+        break;
+      case 3:
+        BOOST_CHECK(result == "Мир");
+        break;
+      case 4:
+        BOOST_CHECK(result == "World");
+        break;
+      default:
+        BOOST_ERROR("Incorrect number of words extracted");
+        break;
+    }
+  }
 }
 
 }} // namespace strutext, utility.
