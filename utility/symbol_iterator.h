@@ -46,7 +46,7 @@ struct AlphaFilter {
 };
 
 /// Lowering symbols.
-symbols::SymbolCode LowerAndSpace(symbols::SymbolCode symbol) {
+inline symbols::SymbolCode LowerAndSpace(symbols::SymbolCode symbol) {
   if (symbols::IsSeparator(symbol)) {
     return static_cast<symbols::SymbolCode>(0x20);
   }

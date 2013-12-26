@@ -66,8 +66,11 @@ public:
 
     // Fill buffer.
     buffer_.set_capacity(max_len);
-    for (; it_ != end_ and buffer_.size() < buffer_.capacity(); ++it_) {
+    for (; it_ != end_; ++it_) {
       buffer_.push_back(*it_);
+      if (buffer_.size() >= buffer_.capacity()) {
+          break;
+      }
     }
     ngram_len_ = buffer_.size() >= min_len_ ? min_len_ : 0;
   }
