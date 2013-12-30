@@ -64,6 +64,11 @@ public:
 
 private:
   void increment() {
+    if (it_ == end_ and not word_.empty()) {
+      word_.clear();
+      return;
+    }
+
     // At first, skip whitespaces.
     for (; it_ != end_; ++it_) {
       if (symbols::IsLetter(*it_)) {
@@ -86,7 +91,7 @@ private:
 
   inline bool equal(const WordIterator& other) const {
     // All end of stream iterators are equal.
-    if (it_ == end_ and other.it_ == other.end_) {
+    if (it_ == end_ and other.it_ == other.end_ and word_.empty() and other.word_.empty()) {
       return true;
     }
     return it_ == other.it_;
