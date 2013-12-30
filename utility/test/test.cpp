@@ -112,30 +112,32 @@ BOOST_AUTO_TEST_CASE(Utility_SymbolAlphaIterator_RussianGeneral) {
 BOOST_AUTO_TEST_CASE(Utility_WordIterator_EnglishRussianWords) {
   typedef encode::Utf8Iterator<std::string::const_iterator> Utf8IteratorImpl;
   typedef WordIterator<symbols::SymbolCode, Utf8IteratorImpl> WordIteratorImpl;
-  std::string text = "    12321321  ,,, \\///!!! Здравствуй, hello [[[ Мир  ]]]  !!!! World";
+  std::string text = "Добро пожаловать, dear friend";
   Utf8IteratorImpl utf8_begin(text.begin(), text.end()), utf8_end;
-  size_t counter = 1;
-  for (WordIteratorImpl it(utf8_begin, utf8_end), end; it != end; ++it, ++counter) {
+  size_t counter = 0;
+  for (WordIteratorImpl it(utf8_begin, utf8_end), end; it != end; ++it) {
+    ++counter;
     std::string result;
     encode::GetUtf8Sequence((*it).begin(), (*it).end(), std::back_inserter(result));
     switch (counter) {
       case 1:
-        BOOST_CHECK(result == "Здравствуй");
+        BOOST_CHECK(result == "Добро");
         break;
       case 2:
-        BOOST_CHECK(result == "hello");
+        BOOST_CHECK(result == "пожаловать");
         break;
       case 3:
-        BOOST_CHECK(result == "Мир");
+        BOOST_CHECK(result == "dear");
         break;
       case 4:
-        BOOST_CHECK(result == "World");
+        BOOST_CHECK(result == "friend");
         break;
       default:
         BOOST_ERROR("Incorrect number of words extracted");
         break;
     }
   }
+  BOOST_CHECK(counter == 4);
 }
 
 }} // namespace strutext, utility.

@@ -94,7 +94,7 @@ private:
     if (it_ == end_ and other.it_ == other.end_ and word_.empty() and other.word_.empty()) {
       return true;
     }
-    return it_ == other.it_;
+    return it_ == other.it_ and word_ == other.word_;
   }
 
   Word     word_;
