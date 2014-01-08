@@ -12,11 +12,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * \brief  Automata library implementation.
+ * \brief  Main library source file.
  * \author Vladimir Lapshin.
  */
 
-#include "automata.h"
-#include "nfa.h"
-#include "nfa_operations.h"
-#include "nfa_printer.h"
+#include "ansi_symbol_set.h"
