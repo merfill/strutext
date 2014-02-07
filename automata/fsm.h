@@ -93,7 +93,7 @@ struct FiniteStateMachine {
    * \param  symbol The move symbol.
    * \return        Move state number or kInvalidState if move is absent.
    */
-  StateId Go(const automata::StateId& state, const CharType& symbol) const { return states_[state].trans_.Go(symbol); }
+  StateId Go(const StateId& state, const CharType& symbol) const { return states_[state].trans_.Go(symbol); }
 
   /**
    * \brief Adding new state.
@@ -113,7 +113,7 @@ struct FiniteStateMachine {
    * \param to      State to move to.
    * \param symbol  The move's symbol.
    */
-  void AddTransition(const automata::StateId& from, const automata::StateId& to, const CharType& symbol) {
+  void AddTransition(const StateId& from, const StateId& to, const CharType& symbol) {
     states_[from].trans_.AddTransition(to, symbol);
   }
 
@@ -122,7 +122,7 @@ struct FiniteStateMachine {
    *
    * \param state The state number.
    */
-  void MakeAcceptable(const automata::StateId& state) {
+  void MakeAcceptable(const StateId& state) {
     states_[state].is_accepted_ = true;
   }
 
@@ -132,12 +132,12 @@ struct FiniteStateMachine {
    * \param  state  The state number.
    * \return        true if the state is acceptable and false otherwise.
    */
-  bool IsAcceptable(const automata::StateId& state) const {
+  bool IsAcceptable(const StateId& state) const {
     return states_[state].is_accepted_;
   }
 
   /// Return reference to the move table.
-  const typename Transitions::TransTable& GetMoveTable(const automata::StateId& state) const {
+  typename Transitions::TransTable GetMoveTable(const StateId& state) const {
       return states_[state].trans_.GetMoveTable();
   }
 

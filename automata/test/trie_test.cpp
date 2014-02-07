@@ -24,15 +24,17 @@
 #include <boost/test/unit_test.hpp>
 
 #include "trie.h"
+#include "compact_trie.h"
 #include "flex_transitions.h"
 #include "serializer.h"
 
 namespace {
 
 // Trie type definitions.
-typedef strutext::automata::FlexTransitions<char>       Trans;
-typedef strutext::automata::Trie<Trans, uint64_t>       FlexTrie;
-typedef strutext::automata::AttrFsmSerializer<FlexTrie> Serializer;
+typedef strutext::automata::FlexTransitions<char>        Trans;
+typedef strutext::automata::Trie<Trans, uint64_t>        FlexTrie;
+typedef strutext::automata::AttrFsmSerializer<FlexTrie>  Serializer;
+typedef strutext::automata::CompactTrie<Trans, uint64_t> CompactFlexTrie;
 
 // Utilities.
 struct TrieUtils {
@@ -103,4 +105,15 @@ BOOST_AUTO_TEST_CASE(Automata_Trie_Serialize) {
   // Check the chains are in the trie.
   BOOST_CHECK(TrieUtils::CheckCnainInTrie("hello", 1, trie1));
   BOOST_CHECK(TrieUtils::CheckCnainInTrie("bye", 2, trie1));
+}
+
+// Serialization test.
+BOOST_AUTO_TEST_CASE(Automata_CompactTrie_Check) {
+  // Create trie and add chains into it.
+  FlexTrie trie;
+  TrieUtils::AddChainToTrie("hello", 1, trie);
+  TrieUtils::AddChainToTrie("bye", 2, trie);
+  TrieUtils::AddChainToTrie("byello", 3, trie);
+
+  CompactFlexTrie compact_trie(trie);
 }

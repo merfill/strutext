@@ -21,6 +21,7 @@
 #include <cassert>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include "fsm_defs.h"
 
@@ -47,7 +48,7 @@ struct FlatTransitions {
   typedef Char CharType;
 
   /// Move table type.
-  typedef StateId TransTable[Size];
+  typedef std::map<CharType, StateId> TransTable;
 
   // Make serializer to be friend.
   friend class TransSerializer<FlatTransitions<Char, Size> >;
@@ -64,7 +65,7 @@ struct FlatTransitions {
    * \param  symbol Symbol to make move.
    * \return        The index of the move state or kInvalidState if the move is absent.
    */
-  automata::StateId Go(CharType symbol) const {
+  StateId Go(CharType symbol) const {
     assert(symbol < Size);
     return trans_table_[symbol];
   }
@@ -81,11 +82,17 @@ struct FlatTransitions {
   }
 
   /// Return reference to move table.
-  const TransTable& GetMoveTable() const {
-    return trans_table_;
+  TransTable GetMoveTable() const {
+    TransTable result;
+    for (size_t i = 0; i < Size; ++i) {
+      if (trans_table_[i] > 0) {
+        result.insert(std::make_pair(static_cast<CharType>(i), trans_table_[i]));
+      }
+    }
+    return result;
   }
 
-  automata::StateId trans_table_[Size]; ///< Move table.
+  StateId trans_table_[Size]; ///< Move table.
 };
 
 }} // namespace strutext, automata.

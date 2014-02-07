@@ -68,7 +68,7 @@ struct FlexTransitions {
   }
 
   /// Return reference to the move table.
-  const TransTable& GetMoveTable() const {
+  TransTable GetMoveTable() const {
     return trans_table_;
   }
 

@@ -32,7 +32,7 @@ template <class> struct AttrFsmSerializer;
 /**
  * \brief FSM with attributes definition.
  *
- * State attribute is 64-bit interger. An each state contains a list of such attributes.
+ * State attribute is some template type. An each state contains a list of such attributes.
  */
 template <class T1, typename T2>
 struct AttributeFsm : public FiniteStateMachine<T1> {
