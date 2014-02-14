@@ -23,9 +23,21 @@
 #include <set>
 #include <map>
 
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+
 #include "trie.h"
 
 namespace strutext { namespace automata {
+
+namespace details {
+
+using strutext::automata::StateId;
+
+
+} // namespace details.
 
 /**
  * \brief Compact trie class implementation.
@@ -73,7 +85,8 @@ struct CompactTrie : public FiniteStateMachine<T1> {
    * The compact trie is built from the classical trie, which passed as initialization parameter.
    */
   explicit CompactTrie(const TrieImpl& trie) {
-    BuildCompactTrie(trie);
+    Print(trie);
+    Minimize(trie);
   }
 
   /**
@@ -118,25 +131,145 @@ struct CompactTrie : public FiniteStateMachine<T1> {
   }
 
 private:
-  /// Build compact trie from the trie.
-  void BuildCompactTrie(const TrieImpl& trie) {
-    typedef std::pair<StateId, SymbolType> Move;
-    typedef std::map<StateId, Move> StateWithMoveList;
-    typedef std::set<StateId> StateList;
+  // ****** Some internal types and functions to minimize input trie *****
 
-    // Collect state moves. For each state there is only one move to this. Collect triples
-    // (state, state_from, symbol).
-    StateWithMoveList st_moves;
+  // State information structure to build minimized trie.
+  struct StateInfo {
+    typedef boost::unordered_map<SymbolType, StateInfo*>    MoveList;
+    typedef std::list<AttributeType>                        AttributeList;
+    typedef boost::unordered_map<SymbolType, AttributeList> MoveAttributeList;
+
+    StateInfo(StateId state_id, SymbolType in_symbol, bool is_acceptable)
+      : state_id_(state_id)
+      , in_symbol_(in_symbol)
+      , is_acceptable_(is_acceptable) {}
+
+    StateId           state_id_;
+    SymbolType        in_symbol_;
+    bool              is_acceptable_;
+    MoveList          move_list_;
+    MoveAttributeList attr_list_;
+  };
+
+  // State equality implementation.
+  struct StateInfoEqual : std::binary_function<StateInfo, StateInfo, bool> {
+    bool operator()(const StateInfo& left, const StateInfo& right) const {
+      if (left.is_acceptable_ != right.is_acceptable_) {
+        return false;
+      }
+      if (left.in_symbol_ != right.in_symbol_) {
+        return false;
+      }
+      if (left.move_list_.size() != right.move_list_.size()) {
+        return false;
+      }
+      for (typename StateInfo::MoveList::const_iterator lit = left.move_list_.begin(), rit = right.move_list_.end();
+              lit != left.move_list_.end() and rit != right.move_list_.end(); ++lit, ++rit) {
+        if (lit->first != rit->first or lit->second != rit->second) {
+          return false;
+        }
+      }
+      return true;
+    }
+  };
+
+  // State hash builder implementation.
+  struct StateInfoHash : std::unary_function<StateInfo, size_t> {
+    size_t operator()(const StateInfo& state) const {
+      size_t seed = 0;
+      boost::hash_combine(seed, state.is_acceptable_);
+      boost::hash_combine(seed, state.in_symbol_);
+      for (typename StateInfo::MoveList::const_iterator it = state.move_list_.begin(); it != state.move_list_.end(); ++it) {
+        boost::hash_combine(seed, it->first);
+        boost::hash_combine(seed, it->second);
+      }
+      return seed;
+    }
+  };
+
+  typedef boost::shared_ptr<StateInfo>                                                 StateInfoPtr;
+  typedef boost::unordered_map<StateInfo, StateInfoPtr, StateInfoHash, StateInfoEqual> StateInfoSet;
+  typedef std::pair<StateInfo*, typename StateInfo::AttributeList>                     MinimizationResult;
+
+  // Tri minimization recursive method.
+  static MinimizationResult Minimize(StateId state_id, SymbolType symbol, const TrieImpl& trie, StateInfoSet& reg) {
+    typename StateInfo::AttributeList attrs;
+    StateInfoPtr state = boost::make_shared<StateInfo>(state_id, symbol, trie.IsAcceptable(state_id));
+
+    // Go through move list of the state and go down for each transition.
+    typename TransitionType::TransTable mt = trie.GetMoveTable(state_id);
+    for (typename TransitionType::TransTable::iterator mt_it = mt.begin(); mt_it != mt.end(); ++mt_it) {
+      // Go down the transion.
+      MinimizationResult result = Minimize(mt_it->second, mt_it->first, trie, reg);
+
+      // Add transiotion to the new automation.
+      StateInfo* next_state = result.first;
+      state->move_list_.insert(std::make_pair(mt_it->first, next_state));
+
+      // Pass attribute list up or save it in the current transion.
+      if ((state->is_acceptable_ or mt.size() > 1) and not result.second.empty()) {
+        state->attr_list_.insert(std::make_pair(mt_it->first, result.second));
+      } else {
+        attrs = result.second;
+      }
+    }
+
+    // Search the state in the storage.
+    typename StateInfoSet::iterator it = reg.find(*state);
+    if (it != reg.end()) {
+      // Do not create state as it is already created.
+      state = it->second;
+    } else {
+      // Register and save the state in the storage.
+      reg.insert(std::make_pair(*state, state));
+    }
+
+    // We need to inherit attributes of acceptable state.
+    if (state->is_acceptable_) {
+      attrs = typename StateInfo::AttributeList(trie.states_attr_[state_id].begin(), trie.states_attr_[state_id].end());
+    }
+
+    return MinimizationResult(state.get(), attrs);
+  }
+
+  void Minimize(const TrieImpl& trie) {
+    StateInfoSet reg;
+    MinimizationResult result = Minimize(kStartState, 0, trie, reg);
+    StateInfo* start_state = result.first;
+    std::cout << "\n\n";
+    Print(start_state);
+  }
+
+  void Print(const StateInfo* start_state) {
+    typedef std::set<const StateInfo*> StateList;
+
     StateList st_list;
-    st_list.insert(kStartState);
+    st_list.insert(start_state);
     while (true) {
       StateList new_states;
-      for (StateList::iterator st_it = st_list.begin(); st_it != st_list.end(); ++st_it) {
-        typename TransitionType::TransTable mt = trie.GetMoveTable(*st_it);
-        for (typename TransitionType::TransTable::iterator mt_it = mt.begin(); mt_it != mt.end(); ++mt_it) {
-          st_moves.insert(std::make_pair(mt_it->second, Move(*st_it, mt_it->first)));
-          new_states.insert(mt_it->second);
+      for (typename StateList::iterator st_it = st_list.begin(); st_it != st_list.end(); ++st_it) {
+        if (*st_it == start_state) {
+            std::cout << "--> ";
         }
+        if ((*st_it)->is_acceptable_) {
+          std::cout << " *  ";
+        }
+        std::cout << (*st_it)->state_id_ << "  ";
+        typename StateInfo::MoveList mv = (*st_it)->move_list_;
+        for (typename StateInfo::MoveList::const_iterator mv_it = mv.begin(); mv_it != mv.end(); ++mv_it) {
+          std::cout << " (" << mv_it->first << ";" << mv_it->second->state_id_ << ")";
+          std::cout << " => [";
+          typename StateInfo::MoveAttributeList::const_iterator attr_it = (*st_it)->attr_list_.find(mv_it->first);
+          if (attr_it != (*st_it)->attr_list_.end()) {
+            const typename StateInfo::AttributeList& attrs = attr_it->second;
+            for (typename StateInfo::AttributeList::const_iterator ait = attrs.begin(); ait != attrs.end(); ++ait) {
+              std::cout << " " << *ait;
+            }
+          }
+          std::cout << "]";
+          new_states.insert(mv_it->second);
+        }
+        std::cout << "\n";
       }
       if (new_states.empty()) {
         break;
@@ -144,19 +277,36 @@ private:
         st_list = new_states;
       }
     }
+  }
 
-    // Now, paste together states with the same moves to.
+  void Print(const TrieImpl& trie) {
+    typedef std::set<StateId> StateList;
 
-    typedef 
-
-    // At first, glue acceptable states.
-
-
-
-    for (typename StateWithMoveList::iterator it = st_moves.begin(); it != st_moves.end(); ++it) {
-      std::cout << it->first << " <- (" << it->second.first << ";" << it->second.second << ")\n";
+    StateList st_list;
+    st_list.insert(kStartState);
+    while (true) {
+      StateList new_states;
+      for (StateList::iterator st_it = st_list.begin(); st_it != st_list.end(); ++st_it) {
+        if (*st_it == kStartState) {
+            std::cout << "--> ";
+        }
+        if (trie.IsAcceptable(*st_it)) {
+          std::cout << " *  ";
+        }
+        std::cout << *st_it << "  ";
+        typename TransitionType::TransTable mt = trie.GetMoveTable(*st_it);
+        for (typename TransitionType::TransTable::iterator mt_it = mt.begin(); mt_it != mt.end(); ++mt_it) {
+          std::cout << " (" << mt_it->first << ";" << mt_it->second << ")";
+          new_states.insert(mt_it->second);
+        }
+        std::cout << "\n";
+      }
+      if (new_states.empty()) {
+        break;
+      } else {
+        st_list = new_states;
+      }
     }
-
   }
 
   StateAttributeList attributes_;

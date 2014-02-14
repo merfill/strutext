@@ -111,9 +111,15 @@ BOOST_AUTO_TEST_CASE(Automata_Trie_Serialize) {
 BOOST_AUTO_TEST_CASE(Automata_CompactTrie_Check) {
   // Create trie and add chains into it.
   FlexTrie trie;
-  TrieUtils::AddChainToTrie("hello", 1, trie);
-  TrieUtils::AddChainToTrie("bye", 2, trie);
-  TrieUtils::AddChainToTrie("byello", 3, trie);
+  TrieUtils::AddChainToTrie("aa", 1, trie);
+  TrieUtils::AddChainToTrie("ab", 2, trie);
+  TrieUtils::AddChainToTrie("ba", 3, trie);
+  TrieUtils::AddChainToTrie("bb", 4, trie);
+  TrieUtils::AddChainToTrie("xxxbb", 5, trie);
+  TrieUtils::AddChainToTrie("b", 6, trie);
+  TrieUtils::AddChainToTrie("x", 7, trie);
+  TrieUtils::AddChainToTrie("cxbb", 8, trie);
+  TrieUtils::AddChainToTrie("aa", 9, trie);
 
   CompactFlexTrie compact_trie(trie);
 }
