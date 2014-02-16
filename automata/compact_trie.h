@@ -32,13 +32,6 @@
 
 namespace strutext { namespace automata {
 
-namespace details {
-
-using strutext::automata::StateId;
-
-
-} // namespace details.
-
 /**
  * \brief Compact trie class implementation.
  *
@@ -98,26 +91,29 @@ struct CompactTrie : public FiniteStateMachine<T1> {
    * \param end   End iterator of the chain.
    * \return      List of the chain's attributes if any.
    */
-  template <class T>
-  AttributeList Match(T begin, T end) {
+  template <class Iterator>
+  AttributeList Match(Iterator begin, Iterator end) {
     AttributeList result;
     StateId state = kStartState;
-    for (T it = begin; it != end; ++it) {
+    for (Iterator it = begin; it != end; ++it) {
+      StateId prev_state = state;
       const SymbolType& symbol = *it;
       state = FsmImpl::Go(state, symbol);
       if (state == kInvalidState) {
         break;
-      } else {
-        // Search state attributes.
-        typename StateAttributeList::iterator state_it = attributes_.find(state);
-        if (state_it != attributes_.end()) {
-          const MoveAttributeList& state_attributes = state_it->second;
-          // Search move attributes.
-          typename MoveAttributeList::iterator  move_it = state_attributes.find(symbol);
-          if (move_it != state_attributes.end()) {
-            const AttributeVector& move_attrs = move_it->second;
-            result.insert(result.end(), move_attrs.begin(), move_attrs.end());
-          }
+      } else if (FsmImpl::IsAcceptable(prev_state)) { // Clear attribute list if go through accptable state.
+        result = AttributeList();
+      }
+
+      // Search state attributes.
+      typename StateAttributeList::iterator state_it = attributes_.find(state);
+      if (state_it != attributes_.end()) {
+        // Search move attributes.
+        const MoveAttributeList& state_attributes = state_it->second;
+        typename MoveAttributeList::iterator  move_it = state_attributes.find(symbol);
+        if (move_it != state_attributes.end()) {
+          const AttributeVector& move_attrs = move_it->second;
+          result = move_attrs;
         }
       }
     }
@@ -241,22 +237,26 @@ private:
   }
 
   void Print(const StateInfo* start_state) {
-    typedef std::set<const StateInfo*> StateList;
+    typedef boost::unordered_set<const StateInfo*> StateList;
+    typedef boost::unordered_map<const StateInfo*, StateId> StateIdList;
 
     StateList st_list;
+    StateIdList handled_states;
     st_list.insert(start_state);
     while (true) {
       StateList new_states;
       for (typename StateList::iterator st_it = st_list.begin(); st_it != st_list.end(); ++st_it) {
-        if (*st_it == start_state) {
-            std::cout << "--> ";
+        if (handled_states.find(*st_it) != handled_states.end()) {
+          continue;
         }
-        if ((*st_it)->is_acceptable_) {
-          std::cout << " *  ";
+
+        StateId cur_state_id = kStartState;
+        if (*st_it != start_state) {
+          cur_state_id = FsmImpl::AddState((*st_it)->is_acceptable_);
         }
-        std::cout << (*st_it)->state_id_ << "  ";
         typename StateInfo::MoveList mv = (*st_it)->move_list_;
         for (typename StateInfo::MoveList::const_iterator mv_it = mv.begin(); mv_it != mv.end(); ++mv_it) {
+          FsmImpl::AddTransition(cur_state_id);
           std::cout << " (" << mv_it->first << ";" << mv_it->second->state_id_ << ")";
           std::cout << " => [";
           typename StateInfo::MoveAttributeList::const_iterator attr_it = (*st_it)->attr_list_.find(mv_it->first);
