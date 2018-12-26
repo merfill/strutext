@@ -226,7 +226,7 @@ strutext::encode::GetUtf8Sequence(0x41, std::back_inserter(result));
 
 The library also impements variety of single byte to UNICODE encoder iterators for Russian and Ukraine languages. Below there is the definition
 of these encoders:
-```c+cpp
+```cpp
 #include "char_iterator.h"
 #include "char_unicode32_decoder.h"
 
