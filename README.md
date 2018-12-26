@@ -1,4 +1,4 @@
-# strutext - c_cpp library of text structuring components
+# strutext - C++ library of text structuring components
 
 The library implements following components:
 * **symbols** - symbolic level processing component;
@@ -45,7 +45,7 @@ The classes may also have sybclasses. See type definition for more information. 
 and some extra information, which depends on the symbol class. For instance, for **Letter** class the type contains code of lower and upper
 letter variant.
 
-```c_cpp
+```cpp
 typedef uint32_t SymbolCode;
 
 enum SymbolClass {
@@ -114,7 +114,7 @@ inline bool IsOther(const SymbolCode& code);
 **Letter** symbol class has two sublclasses that contain lower and upper letter's variants if it's applicable to the letter. The library provides
 routines to transform letters to lower and upper representations and to define either the letter is in upper or lower case.
 
-```c_cpp
+```cpp
 bool IsCasedLetter(const SymbolCode& code);
 SymbolCode ToLower(const SymbolCode& code);
 SymbolCode ToUpper(const SymbolCode& code)
@@ -154,7 +154,7 @@ Example of English symbol definitions:
 ```
 
 The library implements Python script, which reads UnicodeData.txt during precompilation stage and generates three arrays:
-```c_cpp
+```cpp
 extern uint32_t    SYM_CLASS_TABLE[];
 extern SymbolCode  SYM_UPPER_TABLE[];
 extern SymbolCode  SYM_LOWER_TABLE[];
@@ -178,7 +178,7 @@ boost::iterator\_facade and thus can be used in the code as ordinal C++ STL styl
 sequence encoded in UTF-8. The template paremeter of the class is ByteIterator to get bytes from the input sequence.
 
 The extracted symbol is encoded in structure named Utf8Symbol.
-```c_cpp
+```cpp
 struct Utf8Symbol {
 ...
   uint8_t  chain_[6]; // UTF-8 byte sequence read.
@@ -191,7 +191,7 @@ Here **utf32\_** contains UNICODE code of the extracted symbol, **.GetChain()** 
 from the iterator.
 
 Below there is the example of extracting UNICODE symbols from byte sequence of Russian text contained in std::string object.
-```c_cpp
+```cpp
 typedef strutext::encode::Utf8Iterator<std::string::const_iterator> Utf8Iterator;
 
 std::string input = "Мама мыла раму";
@@ -207,7 +207,7 @@ for (Utf8Iterator it = Utf8Iterator(input.begin(), input.end()); it != Utf8Itera
 ### Utf8Generator
 
 The file `utf8_generator.h` contains routine, which implements generation of UTF-8 sequence from UNICODE symbol code. The routine code is following:
-```c_cpp
+```cpp
 template <typename ByteIterator>
 inline ByteIterator GetUtf8Sequence(strutext::symbols::SymbolCode code, ByteIterator oi);
 
@@ -217,7 +217,7 @@ inline ByteIterator GetUtf8Sequence(Utf32Iterator begin, Utf32Iterator end, Byte
 
 The function gets symbol code on the input and produced UTF-8 sequence to the passed output byte iterator. The second version of the routine gets
 a sequence of UNICODE symbols as the input. Below there is the code example:
-```c_cpp
+```cpp
 std::string result;
 strutext::encode::GetUtf8Sequence(0x41, std::back_inserter(result));
 ```
@@ -254,7 +254,7 @@ for (Cp1251Iterator it(word.begin(), word.end(), end; it != end; ++it) {
 The library implements morphological analysis algorithms for English and Russia languages. The main library interface is defined in
 `morpho/morpholib/morpho.h` file. the file contains definitions of classes `MorphologistBase`, which defines interface to the library and inherited
 `Morphologist` template class, which is parametrized by Alphabet class. It's needed to define following types to use library:
-```c_cpp
+```cpp
 #include "rus_alphabet.h"
 #include "eng_alphabet.h"
 #include "morpho_modifier.h"
@@ -276,12 +276,12 @@ later, in the section _Language Models_.
 
 The `Morphologist` class provides method `Analize`, which gets form text in UTF-8 encoding and returns list of possible lemmas for the given form.
 One form can be in more than one lemma. For example, form _say_ can be in two lemmas: noun _say_ and adverb _say_. The method definition is:
-```c_cpp
+```cpp
 void Analize(const std::string& text, LemList& lem_list) const;
 ```
 
 Here the definition of `LemList`:
-```c_cpp
+```cpp
 struct Lemma {
 ...
   uint32_t id_;   ///< Lemma identifier.
@@ -294,18 +294,18 @@ typedef std::list<Lemma> LemList;
 
 Thus, `Lemma` contains unique identifier and list of lexical attributes. This list is encoded in 4 bytes only and `Morphologist` class provides
 special methods to generate form UTF-8 text from encoded attribute list and lemma id: `Generate` ans `GenAllForms`:
-```c_cpp
+```cpp
 std::string Generate(uint32_t lem_id, uint32_t attrs) const;
 size_t GenAllForms(uint32_t lem_id, std::set<std::string>& form_set) const;
 ```
 
 One can also generate main form for passed lemma identifier:
-```c_cpp
+```cpp
 bool GenMainForm(uint32_t lem_id, std::string& main_form) const;
 ```
 
 The `Morphologist` class is also serializable and must be initialized by dictionary comming from std::stream:
-```c_cpp
+```cpp
 void Serialize(std::ostream& os) const;
 void Deserialize(std::istream& is);
 ```
@@ -321,7 +321,7 @@ languages by using the same abstract type.
 For the moment, two langauge models are implemented: for Russian and English languages. The part of speech classes are inherited from `EnglishPos`
 and `RussianPos` respectively. The concrete POS classes are, for example: Noun, Adjective, Verb, and etc. An each POS class is serializable to
 `uint32_t` type. The `PosSerializer` class provides interface to extract POS class instance from `uint32_t` object.
-```c_cpp
+```cpp
 static EnglishPos::Ptr Deserialize(const uint32_t& ob);
 static RussianPos::Ptr Deserialize(const uint32_t& ob);
 ```
@@ -400,7 +400,7 @@ These two commands generate English and Russian binary representations of dictio
 
 Here the the example of main form generation for Russian dictionary.
 
-```c_cpp
+```cpp
 typedef strutext::morpho::Morphologist<strutext::morpho::RussianAlphabet> Morpher;
 
 std::ifstream dict("rus_dict.bin");
