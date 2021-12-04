@@ -31,12 +31,22 @@ add_custom_command(
     COMMENT "Generating UNICODE symbol table"
 )
 
+# generate Unihan hierogliph table
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/unihan_table.cpp
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/unihan_generator.py -i ${CMAKE_CURRENT_SOURCE_DIR}/Unihan_Readings.txt -o ${CMAKE_CURRENT_BINARY_DIR}/unihan_table.cpp
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Unihan_Readings.txt ${CMAKE_CURRENT_SOURCE_DIR}/unihan_generator.py
+    COMMENT "Generating Unihan codes table"
+)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # symbols library.
 set(NAME symbols)
 add_library(${NAME} STATIC
   ${CMAKE_CURRENT_BINARY_DIR}/symbol_table.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/unihan_table.cpp
 )
 
 add_subdirectory(test)
