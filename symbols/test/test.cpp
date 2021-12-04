@@ -149,3 +149,12 @@ BOOST_AUTO_TEST_CASE(Symbols_SymbolCases_RussianToLower) {
     ++current;
   }
 }
+
+BOOST_AUTO_TEST_CASE(Symbols_Unihan_General) {
+  BOOST_CHECK_EQUAL(sym::IsHierogliph(0x3400), true);
+  BOOST_CHECK_EQUAL(sym::IsHierogliph(0x340A), true);
+  BOOST_CHECK_EQUAL(sym::IsHierogliph(0x31304), true);
+  BOOST_CHECK_EQUAL(sym::IsHierogliph(0x31305), false);
+  BOOST_CHECK_EQUAL(sym::IsHierogliph(0x31348), true);
+  BOOST_CHECK_EQUAL(sym::details::UNIHAN_TABLE_SIZE, 201545);
+}

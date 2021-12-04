@@ -94,7 +94,17 @@ extern uint32_t    SYM_CLASS_TABLE[];
 extern SymbolCode  SYM_UPPER_TABLE[];
 extern SymbolCode  SYM_LOWER_TABLE[];
 
+extern bool UNIHAN_TABLE[];
+extern unsigned UNIHAN_TABLE_SIZE;
+
 }  // namespace details.
+
+inline bool IsHierogliph(const SymbolCode& code) {
+  if (code < details::UNIHAN_TABLE_SIZE) {
+    return details::UNIHAN_TABLE[code];
+  }
+  return false;
+}
 
 inline const uint32_t& GetSymbolClass(const SymbolCode& code) {
   return details::SYM_CLASS_TABLE[code];
